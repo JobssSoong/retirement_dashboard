@@ -1,12 +1,12 @@
 <div class='card p-5'>
-  <h3 class='text-lg font-semibold text-white border-l-4 border-[#2dd4bf] pl-3 mb-4'>宏观数据仪表盘</h3>
+  <h3 class='text-lg font-semibold text-white border-l-4 border-[#f59e0b] pl-3 mb-4'>宏观数据仪表盘</h3>
   <div class='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-    <div><div id='cpiChart' class='h-[190px] rounded-xl overflow-hidden bg-[#16213e]/30'></div><div class='text-xs text-gray-500 mt-1'><a class='cred-badge cred-real' href='#app-macro' data-tip='国家统计局直接发布'>真实</a> CPI 同比涨幅，反映历年通胀水平。</div></div>
-    <div><div id='depositChart' class='h-[190px] rounded-xl overflow-hidden bg-[#16213e]/30'></div><div class='text-xs text-gray-500 mt-1'><a class='cred-badge cred-real' href='#app-macro' data-tip='中国人民银行发布'>真实</a> 一年期存款基准利率年末水平。</div></div>
-    <div><div id='savingsChart' class='h-[190px] rounded-xl overflow-hidden bg-[#16213e]/30'></div><div class='text-xs text-gray-500 mt-1'><a class='cred-badge cred-real' href='#app-savings' data-tip='World Bank NY.GDS.TOTL.ZS'>真实</a> 国内总储蓄率（占 GDP）。</div></div>
-    <div><div id='m2gdpChart' class='h-[190px] rounded-xl overflow-hidden bg-[#16213e]/30'></div><div class='text-xs text-gray-500 mt-1'><a class='cred-badge cred-real' href='#app-macro' data-tip='M2/利率人民银行，GDP统计局'>真实</a> M2 同比增速 vs 实际 GDP 增速。</div></div>
-    <div class='sm:col-span-2'><div id='pensionFundChart' class='h-[230px] rounded-xl overflow-hidden bg-[#16213e]/30'></div><div class='text-xs text-gray-500 mt-1'><a class='cred-badge cred-real' href='#app-pensionfund' data-tip='城镇职工基本养老保险基金，人社部统计公报'>真实</a> 养老金池：城镇职工基本养老保险基金年度收入/支出（柱）与累计结余（线，亿元）。2022 因公报口径合并暂缺。</div></div>
-    <div class='sm:col-span-2'><div id='houseChart' class='h-[210px] rounded-xl overflow-hidden bg-[#16213e]/30'></div><div class='text-xs text-gray-500 mt-1'><a class='cred-badge cred-real' href='#app-housing' data-tip='全国商品房均价=统计局销售额÷销售面积；百城均价=中指研究院'>真实</a> 房价：全国商品房平均销售价格与百城新建住宅均价（元/㎡）。</div></div>
+    <div><div id='cpiChart' class='h-[190px] rounded-xl overflow-hidden bg-[#2a2a2e]/30'></div><div class='text-xs text-gray-500 mt-1'><a class='cred-badge cred-real' href='#app-macro' data-tip='国家统计局直接发布'>真实</a> CPI 同比涨幅，反映历年通胀水平。</div></div>
+    <div><div id='depositChart' class='h-[190px] rounded-xl overflow-hidden bg-[#2a2a2e]/30'></div><div class='text-xs text-gray-500 mt-1'><a class='cred-badge cred-real' href='#app-macro' data-tip='中国人民银行发布'>真实</a> 一年期存款基准利率年末水平。</div></div>
+    <div><div id='savingsChart' class='h-[190px] rounded-xl overflow-hidden bg-[#2a2a2e]/30'></div><div class='text-xs text-gray-500 mt-1'><a class='cred-badge cred-real' href='#app-savings' data-tip='World Bank NY.GDS.TOTL.ZS'>真实</a> 国内总储蓄率（占 GDP）。</div></div>
+    <div><div id='m2gdpChart' class='h-[190px] rounded-xl overflow-hidden bg-[#2a2a2e]/30'></div><div class='text-xs text-gray-500 mt-1'><a class='cred-badge cred-real' href='#app-macro' data-tip='M2/利率人民银行，GDP统计局'>真实</a> M2 同比增速 vs 实际 GDP 增速。</div></div>
+    <div class='sm:col-span-2'><div id='pensionFundChart' class='h-[230px] rounded-xl overflow-hidden bg-[#2a2a2e]/30'></div><div class='text-xs text-gray-500 mt-1'><a class='cred-badge cred-real' href='#app-pensionfund' data-tip='城镇职工基本养老保险基金，人社部统计公报'>真实</a> 养老金池：城镇职工基本养老保险基金年度收入/支出（柱）与累计结余（线，亿元）。2022 因公报口径合并暂缺。</div></div>
+    <div class='sm:col-span-2'><div id='houseChart' class='h-[210px] rounded-xl overflow-hidden bg-[#2a2a2e]/30'></div><div class='text-xs text-gray-500 mt-1'><a class='cred-badge cred-real' href='#app-housing' data-tip='全国商品房均价=统计局销售额÷销售面积；百城均价=中指研究院'>真实</a> 房价：全国商品房平均销售价格与百城新建住宅均价（元/㎡）。</div></div>
   </div>
   <div class='source-tag'>CPI/GDP 统计局；存款利率、M2 人民银行；储蓄率 World Bank；养老金基金 人社部；房价 统计局/中指研究院。</div>
   <div class='text-xs text-gray-500 mt-1'><a class='cred-badge cred-est' href='#app-assumption' data-tip='预测为趋势外推，非官方'>估算</a> <b>2025–2090 预测</b>（虚线/浅色）方法：基于近年趋势外推 + 人口/政策方向——CPI 回归约 2%、利率低位缓升、储蓄率随老龄化降至约 30%、M2/GDP 增速放缓、<b>养老金基金结余约 2028 见顶、2035 前后耗尽（其后需财政补贴，示意为负）</b>、房价随人口缩减趋降。<b>越远期不确定性越大，非官方预测，仅供参考。</b></div>

@@ -30,8 +30,8 @@ Dashboard.register('macro', (() => {
         xAxis: {type: 'category', data: cpiData.map(allYears), axisLabel: {fontSize: 10}},
         yAxis: {type: 'value', name: '%', axisLabel: {fontSize: 10}},
         series: [
-          {name: 'CPI', type: 'line', data: cpiP.hist, smooth: true, areaStyle: {color: 'rgba(45,212,191,0.2)'}, lineStyle: {color: '#2dd4bf'}, symbol: 'none', markLine: fcMark},
-          {name: 'CPI预测', type: 'line', data: cpiP.fc, smooth: true, lineStyle: {color: '#2dd4bf', type: 'dashed'}, symbol: 'none'}
+          {name: 'CPI', type: 'line', data: cpiP.hist, smooth: true, areaStyle: {color: 'rgba(245,158,11,0.2)'}, lineStyle: {color: '#f59e0b'}, symbol: 'none', markLine: fcMark},
+          {name: 'CPI预测', type: 'line', data: cpiP.fc, smooth: true, lineStyle: {color: '#f59e0b', type: 'dashed'}, symbol: 'none'}
         ]
       });
 
@@ -114,8 +114,8 @@ Dashboard.register('macro', (() => {
         xAxis: {type: 'category', data: housePriceData.map(allYears), axisLabel: {fontSize: 10}},
         yAxis: {type: 'value', name: '元/㎡', axisLabel: {formatter: v => (v / 1000) + 'k'}},
         series: [
-          {name: '全国商品房均价', type: 'line', data: priceP.hist, smooth: true, lineStyle: {color: '#2dd4bf', width: 2}, itemStyle: {color: '#2dd4bf'}, areaStyle: {color: 'rgba(45,212,191,0.12)'}, markLine: fcMark},
-          {type: 'line', data: priceP.fc, smooth: true, lineStyle: {color: '#2dd4bf', width: 2, type: 'dashed'}, itemStyle: {color: '#2dd4bf'}},
+          {name: '全国商品房均价', type: 'line', data: priceP.hist, smooth: true, lineStyle: {color: '#f59e0b', width: 2}, itemStyle: {color: '#f59e0b'}, areaStyle: {color: 'rgba(245,158,11,0.12)'}, markLine: fcMark},
+          {type: 'line', data: priceP.fc, smooth: true, lineStyle: {color: '#f59e0b', width: 2, type: 'dashed'}, itemStyle: {color: '#f59e0b'}},
           {name: '百城新建住宅均价', type: 'line', connectNulls: true, data: baiP.hist, lineStyle: {color: '#60a5fa', width: 2}, itemStyle: {color: '#60a5fa'}, symbol: 'circle', symbolSize: 5},
           {type: 'line', connectNulls: true, data: baiP.fc, lineStyle: {color: '#60a5fa', width: 2, type: 'dashed'}, itemStyle: {color: '#60a5fa'}, symbol: 'circle', symbolSize: 5}
         ]

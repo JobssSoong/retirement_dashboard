@@ -1,10 +1,10 @@
 <div class='card p-5'>
   <div class='flex items-center justify-between mb-4 flex-wrap gap-3'>
-    <h3 class='text-lg font-semibold text-white border-l-4 border-[#2dd4bf] pl-3'>中国人口结构金字塔 <a class='cred-badge cred-real' href='#app-population' data-tip='UN WPP 2024 真实数据，中间年份插值。点击查看'>真实</a></h3>
+    <h3 class='text-lg font-semibold text-white border-l-4 border-[#f59e0b] pl-3'>中国人口结构金字塔 <a class='cred-badge cred-real' href='#app-population' data-tip='UN WPP 2024 真实数据，中间年份插值。点击查看'>真实</a></h3>
     <div class='flex items-center gap-2'>
-      <button id='playPyramidBtn' class='px-3 py-1.5 rounded bg-[#16213e] hover:bg-[#1e2d4d] text-white text-sm transition border border-gray-600'>播放</button>
+      <button id='playPyramidBtn' class='px-3 py-1.5 rounded bg-[#2a2a2e] hover:bg-[#3f3f46] text-white text-sm transition border border-gray-600'>播放</button>
       <input id='pyramidYearSlider' type='range' class='w-40 md:w-56'>
-      <span id='pyramidYearValue' class='text-[#2dd4bf] font-mono w-12 text-right'>2020</span>
+      <span id='pyramidYearValue' class='text-[#f59e0b] font-mono w-12 text-right'>2020</span>
     </div>
   </div>
   <div id='pyramidChart' class='w-full h-[420px] rounded-xl overflow-hidden'></div>
@@ -12,11 +12,11 @@
   <div class='source-tag' id='pyramidSource'>数据来源：联合国 UN World Population Prospects 2024（中方案，1950–2090），十年锚点为真实值、中间年份为线性插值；2020 与第七次全国人口普查总量交叉核对一致（差异 &lt;1%）。</div>
   <div class='text-xs text-gray-500 mt-1'>预测假设：UN 中方案设中国总和生育率（TFR）从当前约 <b>1.0</b> 缓升至长期约 <b>1.2</b>（远低于世代更替水平 2.1），叠加预期寿命继续缓慢提高——这是 2060–2090 人口持续缩减的根源。</div>
   <div class='grid grid-cols-2 gap-4 mt-4'>
-    <div class='bg-[#16213e]/50 rounded-lg p-3 text-center border border-gray-700/50'>
+    <div class='bg-[#2a2a2e]/50 rounded-lg p-3 text-center border border-gray-700/50'>
       <div class='text-xs text-gray-400'>老龄化率 (65+/总人口)</div>
       <div id='agingRate' class='text-xl font-bold text-white mt-1'>--</div>
     </div>
-    <div class='bg-[#16213e]/50 rounded-lg p-3 text-center border border-gray-700/50'>
+    <div class='bg-[#2a2a2e]/50 rounded-lg p-3 text-center border border-gray-700/50'>
       <div class='text-xs text-gray-400'>抚养比</div>
       <div id='dependencyRatio' class='text-xl font-bold text-white mt-1'>--</div>
     </div>

@@ -26,8 +26,8 @@ Dashboard.register('asset', (() => {
     container.innerHTML = '';
     assetNames.forEach(name => {
       const row = document.createElement('div');
-      row.className = 'bg-[#16213e]/50 rounded-lg p-3 border border-gray-700/30';
-      row.innerHTML = `<div class='flex justify-between items-center mb-2'><span class='text-sm text-white font-medium'>${name}</span><span class='text-sm text-[#2dd4bf] font-mono asset-pct' data-name='${name}'>${state.assetWeights[name]}%</span></div><input type='range' min='0' max='100' step='1' value='${state.assetWeights[name]}' class='asset-slider w-full mb-2' data-name='${name}'><div class='asset-meta flex justify-between text-xs text-gray-400' data-name='${name}'></div>`;
+      row.className = 'bg-[#2a2a2e]/50 rounded-lg p-3 border border-gray-700/30';
+      row.innerHTML = `<div class='flex justify-between items-center mb-2'><span class='text-sm text-white font-medium'>${name}</span><span class='text-sm text-[#f59e0b] font-mono asset-pct' data-name='${name}'>${state.assetWeights[name]}%</span></div><input type='range' min='0' max='100' step='1' value='${state.assetWeights[name]}' class='asset-slider w-full mb-2' data-name='${name}'><div class='asset-meta flex justify-between text-xs text-gray-400' data-name='${name}'></div>`;
       container.appendChild(row);
     });
     container.querySelectorAll('.asset-slider').forEach(slider => {
@@ -100,7 +100,7 @@ Dashboard.register('asset', (() => {
         xAxis: {type: 'category', data: ages, axisLabel: {fontSize: 10}},
         yAxis: {type: 'value', name: '万元', axisLabel: {formatter: v => fmtNum(v, 0)}},
         series: [
-          {name: '账面每年需存', type: 'line', data: nominalSeries, smooth: true, lineStyle: {color: '#2dd4bf'}, itemStyle: {color: '#2dd4bf'}, symbol: 'none', areaStyle: {color: 'rgba(45,212,191,0.15)'}},
+          {name: '账面每年需存', type: 'line', data: nominalSeries, smooth: true, lineStyle: {color: '#f59e0b'}, itemStyle: {color: '#f59e0b'}, symbol: 'none', areaStyle: {color: 'rgba(245,158,11,0.15)'}},
           {name: '实际购买力每年需存', type: 'line', data: realSeries, lineStyle: {color: '#34d399', type: 'dashed'}, itemStyle: {color: '#34d399'}, symbol: 'none'}
         ]
       }, true);
