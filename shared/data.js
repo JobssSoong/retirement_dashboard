@@ -31,8 +31,9 @@ const cpiData = [
   {year:2016,cpi:2.0},{year:2017,cpi:1.6},{year:2018,cpi:2.1},
   {year:2019,cpi:2.9},{year:2020,cpi:2.5},{year:2021,cpi:0.9},
   {year:2022,cpi:2.0},{year:2023,cpi:0.2},{year:2024,cpi:0.2},
-  {year:2025,cpi:1.5,forecast:true},{year:2026,cpi:2.0,forecast:true},{year:2027,cpi:2.0,forecast:true},
-  {year:2028,cpi:2.0,forecast:true},{year:2029,cpi:2.0,forecast:true},{year:2030,cpi:2.0,forecast:true}
+  {year:2025,cpi:1.5,forecast:true},{year:2030,cpi:2.0,forecast:true},{year:2035,cpi:2.0,forecast:true},
+  {year:2040,cpi:2.0,forecast:true},{year:2050,cpi:2.0,forecast:true},{year:2060,cpi:2.0,forecast:true},
+  {year:2070,cpi:2.0,forecast:true},{year:2080,cpi:2.0,forecast:true},{year:2090,cpi:2.0,forecast:true}
 ];
 const depositRateData = [
   {year:1990,rate:8.64},{year:1991,rate:7.56},{year:1992,rate:7.56},{year:1993,rate:10.98},{year:1994,rate:10.98},
@@ -42,8 +43,9 @@ const depositRateData = [
   {year:2010,rate:2.75},{year:2011,rate:3.50},{year:2012,rate:3.00},{year:2013,rate:3.00},{year:2014,rate:2.75},
   {year:2015,rate:1.50},{year:2016,rate:1.50},{year:2017,rate:1.50},{year:2018,rate:1.50},{year:2019,rate:1.50},
   {year:2020,rate:1.50},{year:2021,rate:1.50},{year:2022,rate:1.50},{year:2023,rate:1.50},{year:2024,rate:1.50},
-  {year:2025,rate:1.50,forecast:true},{year:2026,rate:1.40,forecast:true},{year:2027,rate:1.40,forecast:true},
-  {year:2028,rate:1.30,forecast:true},{year:2029,rate:1.30,forecast:true},{year:2030,rate:1.30,forecast:true}
+  {year:2025,rate:1.50,forecast:true},{year:2030,rate:1.40,forecast:true},{year:2040,rate:1.50,forecast:true},
+  {year:2050,rate:1.60,forecast:true},{year:2060,rate:1.70,forecast:true},{year:2070,rate:1.80,forecast:true},
+  {year:2080,rate:1.90,forecast:true},{year:2090,rate:2.00,forecast:true}
 ];
 // 国内总储蓄率（占 GDP %）。来源：World Bank NY.GDS.TOTL.ZS（国家统计局 / OECD 国民账户口径）
 const savingsRateData = [
@@ -52,8 +54,9 @@ const savingsRateData = [
   {year:2010,rate:50.6},{year:2011,rate:49.2},{year:2012,rate:48.4},{year:2013,rate:47.9},{year:2014,rate:47.1},
   {year:2015,rate:45.7},{year:2016,rate:44.4},{year:2017,rate:44.5},{year:2018,rate:44.2},{year:2019,rate:43.5},
   {year:2020,rate:44.2},{year:2021,rate:45.3},{year:2022,rate:45.6},{year:2023,rate:43.2},
-  {year:2024,rate:42.8,forecast:true},{year:2025,rate:42.3,forecast:true},{year:2026,rate:41.8,forecast:true},
-  {year:2028,rate:41.0,forecast:true},{year:2030,rate:40.0,forecast:true}
+  {year:2024,rate:42.8,forecast:true},{year:2025,rate:42.3,forecast:true},{year:2030,rate:40.0,forecast:true},
+  {year:2035,rate:38.0,forecast:true},{year:2040,rate:36.0,forecast:true},{year:2050,rate:34.0,forecast:true},
+  {year:2060,rate:32.5,forecast:true},{year:2070,rate:31.5,forecast:true},{year:2080,rate:30.5,forecast:true},{year:2090,rate:30.0,forecast:true}
 ];
 const m2gdpData = [
   {year:2000,m2:10.3,gdp:8.5},{year:2001,m2:14.4,gdp:8.3},{year:2002,m2:16.8,gdp:9.1},
@@ -65,9 +68,10 @@ const m2gdpData = [
   {year:2018,m2:8.1,gdp:6.7},{year:2019,m2:8.7,gdp:6.0},{year:2020,m2:10.1,gdp:2.2},
   {year:2021,m2:9.0,gdp:8.4},{year:2022,m2:11.8,gdp:3.0},{year:2023,m2:9.7,gdp:5.2},
   {year:2024,m2:7.3,gdp:5.0},
-  {year:2025,m2:8.0,gdp:4.8,forecast:true},{year:2026,m2:7.8,gdp:4.7,forecast:true},
-  {year:2027,m2:7.6,gdp:4.6,forecast:true},{year:2028,m2:7.5,gdp:4.5,forecast:true},
-  {year:2029,m2:7.3,gdp:4.4,forecast:true},{year:2030,m2:7.2,gdp:4.3,forecast:true}
+  {year:2025,m2:8.0,gdp:4.8,forecast:true},{year:2030,m2:7.2,gdp:4.3,forecast:true},
+  {year:2035,m2:6.8,gdp:4.0,forecast:true},{year:2040,m2:6.5,gdp:3.7,forecast:true},
+  {year:2050,m2:6.0,gdp:3.3,forecast:true},{year:2060,m2:5.5,gdp:3.0,forecast:true},
+  {year:2070,m2:5.2,gdp:2.8,forecast:true},{year:2080,m2:5.0,gdp:2.5,forecast:true},{year:2090,m2:4.8,gdp:2.3,forecast:true}
 ];
 
 // 城镇职工基本养老保险基金（亿元；contributors/beneficiaries 亿人；dependencyRatio %）。来源：人社部统计公报
@@ -89,11 +93,15 @@ const pensionFundData = [
   {year:2023,revenue:70506,expense:63757,balance:63639,contributors:10.66,beneficiaries:1.42,dependencyRatio:22.5},
   {year:2024,revenue:74732,expense:67656,balance:70727,contributors:10.73,beneficiaries:1.47,dependencyRatio:null},
   {year:2025,revenue:79000,expense:73500,balance:76200,contributors:10.80,beneficiaries:1.52,dependencyRatio:23.5,forecast:true},
-  {year:2026,revenue:83500,expense:78500,balance:81200,contributors:10.86,beneficiaries:1.58,dependencyRatio:24.5,forecast:true},
-  {year:2027,revenue:88000,expense:84000,balance:85200,contributors:10.92,beneficiaries:1.64,dependencyRatio:25.5,forecast:true},
-  {year:2028,revenue:92000,expense:89500,balance:84700,contributors:10.98,beneficiaries:1.70,dependencyRatio:26.5,forecast:true},
-  {year:2029,revenue:96000,expense:94500,balance:81200,contributors:11.03,beneficiaries:1.76,dependencyRatio:27.5,forecast:true},
-  {year:2030,revenue:99500,expense:99000,balance:76700,contributors:11.08,beneficiaries:1.82,dependencyRatio:28.5,forecast:true}
+  {year:2028,revenue:92000,expense:89500,balance:85000,contributors:10.98,beneficiaries:1.70,dependencyRatio:26.5,forecast:true},
+  {year:2030,revenue:99500,expense:99000,balance:76700,contributors:11.08,beneficiaries:1.82,dependencyRatio:28.5,forecast:true},
+  {year:2035,revenue:115000,expense:118000,balance:8000,contributors:11.00,beneficiaries:2.10,dependencyRatio:33.0,forecast:true},
+  {year:2040,revenue:125000,expense:132000,balance:-12000,contributors:10.70,beneficiaries:2.40,dependencyRatio:37.0,forecast:true},
+  {year:2050,revenue:130000,expense:145000,balance:-25000,contributors:10.00,beneficiaries:2.80,dependencyRatio:45.0,forecast:true},
+  {year:2060,revenue:128000,expense:150000,balance:-30000,contributors:9.00,beneficiaries:3.00,dependencyRatio:50.0,forecast:true},
+  {year:2070,revenue:122000,expense:148000,balance:-28000,contributors:8.00,beneficiaries:3.10,dependencyRatio:52.0,forecast:true},
+  {year:2080,revenue:115000,expense:140000,balance:-22000,contributors:7.20,beneficiaries:3.00,dependencyRatio:50.0,forecast:true},
+  {year:2090,revenue:108000,expense:130000,balance:-15000,contributors:6.50,beneficiaries:2.90,dependencyRatio:48.0,forecast:true}
 ];
 
 // 房价（元/㎡）。price=全国商品房平均销售价格（统计局：销售额÷销售面积）；baiCity=百城新建住宅均价（中指院年末值）
@@ -114,9 +122,10 @@ const housePriceData = [
   {year:2022,price:9814,baiCity:16205},
   {year:2023,price:10437,baiCity:16220},
   {year:2024,price:9935,baiCity:16654},
-  {year:2025,price:9750,baiCity:16400,forecast:true},{year:2026,price:9650,baiCity:16250,forecast:true},
-  {year:2027,price:9600,baiCity:16100,forecast:true},{year:2028,price:9550,baiCity:16000,forecast:true},
-  {year:2029,price:9500,baiCity:15900,forecast:true},{year:2030,price:9450,baiCity:15800,forecast:true}
+  {year:2025,price:9750,baiCity:16400,forecast:true},{year:2030,price:9450,baiCity:15800,forecast:true},
+  {year:2035,price:9200,baiCity:15300,forecast:true},{year:2040,price:9000,baiCity:14800,forecast:true},
+  {year:2050,price:8700,baiCity:14000,forecast:true},{year:2060,price:8500,baiCity:13500,forecast:true},
+  {year:2070,price:8400,baiCity:13200,forecast:true},{year:2080,price:8300,baiCity:13000,forecast:true},{year:2090,price:8200,baiCity:12800,forecast:true}
 ];
 
 const lifestyleOptions = {basic:6,normal:12,comfortable:20,premium:35,luxury:60};
