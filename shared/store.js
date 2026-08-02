@@ -25,6 +25,13 @@ function loadState() {
   }
   const merged = Object.assign({}, defaultState, parsed);
   if (!merged.assetWeights) merged.assetWeights = Object.assign({}, defaultState.assetWeights);
+  if (!merged.spouse) merged.spouse = Object.assign({}, defaultState.spouse);
+  if (!merged.phaseMul) merged.phaseMul = Object.assign({}, defaultState.phaseMul);
+  // 连续金额字段必须是数字（兼容旧 hash 里的字符串档位 key）
+  ['lifestyle', 'care', 'medical'].forEach(k => {
+    if (typeof merged[k] !== 'number' || isNaN(merged[k])) merged[k] = defaultState[k];
+  });
+  delete merged.careType; delete merged.medicalScenario;  // 清理旧字段
   return merged;
 }
 function saveState() {
