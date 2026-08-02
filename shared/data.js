@@ -61,6 +61,46 @@ const m2gdpData = [
   {year:2024,m2:7.3,gdp:5.0}
 ];
 
+// 城镇职工基本养老保险基金（亿元；contributors/beneficiaries 亿人；dependencyRatio %）。来源：人社部统计公报
+// 2022 因公报口径合并无法剥离职工数据标 null；老年抚养比 2024 官方未公布标 null
+const pensionFundData = [
+  {year:2010,revenue:13420,expense:10555,balance:15376,contributors:3.57,beneficiaries:0.63,dependencyRatio:11.9},
+  {year:2011,revenue:16847,expense:12765,balance:19497,contributors:6.22,beneficiaries:0.68,dependencyRatio:12.3},
+  {year:2012,revenue:20001,expense:15562,balance:23941,contributors:7.88,beneficiaries:0.74,dependencyRatio:12.7},
+  {year:2013,revenue:22680,expense:18470,balance:28269,contributors:8.20,beneficiaries:0.81,dependencyRatio:13.1},
+  {year:2014,revenue:25310,expense:23326,balance:31800,contributors:8.42,beneficiaries:0.86,dependencyRatio:13.7},
+  {year:2015,revenue:29341,expense:25813,balance:35345,contributors:8.58,beneficiaries:0.91,dependencyRatio:14.3},
+  {year:2016,revenue:35058,expense:31854,balance:38380,contributors:8.88,beneficiaries:0.97,dependencyRatio:14.9},
+  {year:2017,revenue:43310,expense:38052,balance:43264,contributors:9.15,beneficiaries:1.03,dependencyRatio:15.5},
+  {year:2018,revenue:51168,expense:44645,balance:50901,contributors:9.42,beneficiaries:1.10,dependencyRatio:16.8},
+  {year:2019,revenue:52919,expense:49228,balance:54623,contributors:9.68,beneficiaries:1.17,dependencyRatio:17.8},
+  {year:2020,revenue:44376,expense:51301,balance:null,contributors:9.99,beneficiaries:1.25,dependencyRatio:19.7},
+  {year:2021,revenue:60455,expense:56481,balance:52574,contributors:10.29,beneficiaries:1.32,dependencyRatio:20.8},
+  {year:2022,revenue:null,expense:null,balance:null,contributors:10.53,beneficiaries:1.36,dependencyRatio:21.8},
+  {year:2023,revenue:70506,expense:63757,balance:63639,contributors:10.66,beneficiaries:1.42,dependencyRatio:22.5},
+  {year:2024,revenue:74732,expense:67656,balance:70727,contributors:10.73,beneficiaries:1.47,dependencyRatio:null}
+];
+
+// 房价（元/㎡）。price=全国商品房平均销售价格（统计局：销售额÷销售面积）；baiCity=百城新建住宅均价（中指院年末值）
+// 百城早年公开渠道无完整年末值标 null
+const housePriceData = [
+  {year:2010,price:5032,baiCity:null},
+  {year:2011,price:5357,baiCity:null},
+  {year:2012,price:5791,baiCity:null},
+  {year:2013,price:6232,baiCity:null},
+  {year:2014,price:6324,baiCity:null},
+  {year:2015,price:6792,baiCity:null},
+  {year:2016,price:7475,baiCity:null},
+  {year:2017,price:7892,baiCity:null},
+  {year:2018,price:8736,baiCity:null},
+  {year:2019,price:9287,baiCity:null},
+  {year:2020,price:9860,baiCity:15795},
+  {year:2021,price:10139,baiCity:16180},
+  {year:2022,price:9814,baiCity:16205},
+  {year:2023,price:10437,baiCity:16220},
+  {year:2024,price:9935,baiCity:16654}
+];
+
 const lifestyleOptions = {basic:6,normal:12,comfortable:20,premium:35,luxury:60};
 // 护理费（每人·月，当前购买力）。来源：民政部/市场调研区间（无全国官方中位数）
 const careOptions = {home:0.6,normal:0.8,mid:2.0,high:3.0};

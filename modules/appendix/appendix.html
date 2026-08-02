@@ -1,0 +1,95 @@
+<div class='card p-5'>
+  <h3 class='text-lg font-semibold text-white border-l-4 border-[#e94560] pl-3 mb-1'>附录 · 数据来源与可信度</h3>
+  <p class='text-xs text-gray-500 mb-4'>每个关键数值标注可信度：<a class='cred-badge cred-real' style='cursor:default'>真实</a>官方统计直接发布 · <a class='cred-badge cred-infer' style='cursor:default'>推测</a>由真实数据推算 · <a class='cred-badge cred-est' style='cursor:default'>估算</a>无官方值、为假设/调研区间。图表上的徽标可点击跳转到此并高亮。</p>
+  <div class='grid grid-cols-1 md:grid-cols-2 gap-3 text-xs'>
+
+    <div class='app-item' id='app-population'>
+      <div class='mb-1'><span class='cred-badge cred-real' style='cursor:default'>真实</span> <b class='text-gray-200'>人口结构金字塔</b></div>
+      <div class='text-gray-400'>UN World Population Prospects 2024 中方案，1950–2090，21 档 5 岁组。十年锚点为真实值、中间年份线性插值；2020 与第七次人口普查总量核对一致（差异&lt;1%）。预测生育率假设见金字塔图下方。</div>
+      <div class='source-tag'><a target='_blank' href='https://population.un.org/wpp/'>population.un.org/wpp</a></div>
+    </div>
+
+    <div class='app-item' id='app-savings'>
+      <div class='mb-1'><span class='cred-badge cred-real' style='cursor:default'>真实</span> <b class='text-gray-200'>国内总储蓄率（占 GDP）</b></div>
+      <div class='text-gray-400'>2023 年约 43.2%。口径为 Gross domestic savings / GDP（非"居民储蓄率~31%"）。</div>
+      <div class='source-tag'><a target='_blank' href='https://data.worldbank.org/indicator/NY.GDS.TOTL.ZS?locations=CN'>World Bank NY.GDS.TOTL.ZS</a></div>
+    </div>
+
+    <div class='app-item' id='app-macro'>
+      <div class='mb-1'><span class='cred-badge cred-real' style='cursor:default'>真实</span> <b class='text-gray-200'>CPI / GDP / M2 / 存款利率</b></div>
+      <div class='text-gray-400'>2024 年 CPI +0.2%、GDP +5.0%、M2 余额 313.5 万亿元、1 年期存款基准利率 1.5%。CPI/GDP 来自统计局，M2/利率来自人民银行。</div>
+      <div class='source-tag'><a target='_blank' href='https://www.stats.gov.cn/sj/zxfb/202502/t20250228_1958817.html'>国家统计局2024公报</a> · <a target='_blank' href='https://www.pbc.gov.cn/'>人民银行</a></div>
+    </div>
+
+    <div class='app-item' id='app-insurance'>
+      <div class='mb-1'><span class='cred-badge cred-real' style='cursor:default'>真实</span> <b class='text-gray-200'>医保报销率与住院数据</b></div>
+      <div class='text-gray-400'>退休人员住院率 49.0%、在职 11.9%；职工医保次均住院 1.2 万元（2023）。本看板"有效报销率"按占总费用计：居民~50%、职工~60%、补充~75%（政策范围内报销比例更高，但含目录外自费，实际占总费用较低）。</div>
+      <div class='source-tag'><a target='_blank' href='https://www.nhsa.gov.cn/art/2025/7/14/art_7_17248.html'>国家医保局2024统计公报</a></div>
+    </div>
+
+    <div class='app-item' id='app-critical'>
+      <div class='mb-1'><span class='cred-badge cred-infer' style='cursor:default'>推测</span> <b class='text-gray-200'>重疾单次治疗费用</b></div>
+      <div class='text-gray-400'>采用值：一般 20 万 / 较高 50 万 / 严重 80 万（总费用，按有效自付率计入）。依据：恶性肿瘤 22–80 万、急性心梗 10–30 万、脑中风 10–40 万（行业读本，非官方统计；含手术+放化疗+靶向药全周期）。</div>
+      <div class='source-tag'><a target='_blank' href='https://www.nfra.gov.cn/cn/view/pages/ItemDetail.html?docId=939848&amp;itemId=926'>金融监管总局 重疾经验发生率2020</a></div>
+    </div>
+
+    <div class='app-item' id='app-medical'>
+      <div class='mb-1'><span class='cred-badge cred-infer' style='cursor:default'>推测</span> <b class='text-gray-200'>年人均医疗总费用（按阶段）</b></div>
+      <div class='text-gray-400'>采用值：活跃 1.5 / 衰退 2.5 / 护理 3.5 万·人·年（毛额）。依据：2024 全国人均卫生总费用 6,454 元，多项研究显示老年人医疗支出约为全人群 2–5 倍，按年龄递增取值。老年人人均医疗支出绝对值官方未单列。</div>
+      <div class='source-tag'><a target='_blank' href='https://www.nhc.gov.cn/guihuaxxs/c100133/202512/f1c3a3c617484a27a1a26a468afbaeee'>卫健委2024卫生健康事业公报</a></div>
+    </div>
+
+    <div class='app-item' id='app-hale'>
+      <div class='mb-1'><span class='cred-badge cred-infer' style='cursor:default'>推测</span> <b class='text-gray-200'>健康预期寿命与阶段划分</b></div>
+      <div class='text-gray-400'>出生 HALE≈68.7 岁（WHO 2019），带病生存约 8–9 年；据此划分活跃&lt;73、衰退 73–83、护理≥83。中国官方未发布自己的 HALE；阶段边界为依据 HALE 的推断。</div>
+      <div class='source-tag'><a target='_blank' href='https://data.who.int/countries/156'>WHO China</a></div>
+    </div>
+
+    <div class='app-item' id='app-lifeexp'>
+      <div class='mb-1'><span class='cred-badge cred-real' style='cursor:default'>真实</span> <b class='text-gray-200'>人均预期寿命</b></div>
+      <div class='text-gray-400'>2023 年 78.6 岁（卫健委）；看板默认预期寿命滑块 80 岁。注意为时期寿命，非队列寿命。</div>
+      <div class='source-tag'><a target='_blank' href='https://www.nhc.gov.cn/'>国家卫健委</a></div>
+    </div>
+
+    <div class='app-item' id='app-lifestyle'>
+      <div class='mb-1'><span class='cred-badge cred-infer' style='cursor:default'>推测</span> <b class='text-gray-200'>生活水平档位（家庭·两人·当前购买力）</b></div>
+      <div class='text-gray-400'>基础 6 / 普通 12 / 舒适 20 / 品质 35 / 奢侈 60 万·年。依据：2024 全国居民人均消费支出 2.82 万、城镇 3.30 万（家庭两人约 5.6–6.6 万）；高收入组人均可支配约 9 万。档位对齐消费分位。"基础 6 万"已接近全国平均家庭消费。</div>
+      <div class='source-tag'><a target='_blank' href='https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202501/t20250117_1958332.html'>国家统计局2024居民收支</a></div>
+    </div>
+
+    <div class='app-item' id='app-care'>
+      <div class='mb-1'><span class='cred-badge cred-est' style='cursor:default'>估算</span> <b class='text-gray-200'>养老护理价格（每人·月）</b></div>
+      <div class='text-gray-400'>采用值：居家 6,000 / 普通养老院 8,000 / 中高端社区 2 万 / 高端护理院 3 万。民政部<b>未发布</b>全国月费中位数，为市场调研区间：一线住家护工 5,000–8,000；民营机构 4,000–8,000；泰康等 CCRC 1.8–2.5 万；高端失能专护 1–3 万。差异主要在失能等级与城市。</div>
+      <div class='source-tag'><a target='_blank' href='http://mzj.gz.gov.cn/dt/mtgz/content/post_10375275.html'>2024国家老龄事业公报（机构/床位）</a></div>
+    </div>
+
+    <div class='app-item' id='app-pension'>
+      <div class='mb-1'><span class='cred-badge cred-est' style='cursor:default'>估算</span> <b class='text-gray-200'>养老金替代率与月金预设</b></div>
+      <div class='text-gray-400'>职工约 45%、机关事业约 70%（含职业年金），国际警戒线 55%；居民月均约 220 元、职工月均约 3,000 元。人社部统计公报<b>不公布</b>替代率，为行业白皮书/政策设计参考值。</div>
+      <div class='source-tag'><a target='_blank' href='https://cpic.com.cn/c/2024-06-26/1863517.shtml'>中国养老金金融白皮书</a></div>
+    </div>
+
+    <div class='app-item' id='app-pensionfund'>
+      <div class='mb-1'><span class='cred-badge cred-real' style='cursor:default'>真实</span> <b class='text-gray-200'>基本养老保险基金收支</b></div>
+      <div class='text-gray-400'>城镇职工养老保险基金年度收入/支出/累计结余、参保与领取待遇人数，见宏观数据面板"养老金池"图。来源：人社部统计公报、财政部社保基金决算。</div>
+      <div class='source-tag'><a target='_blank' href='https://www.mohrss.gov.cn/'>人社部</a></div>
+    </div>
+
+    <div class='app-item' id='app-housing'>
+      <div class='mb-1'><span class='cred-badge cred-real' style='cursor:default'>真实</span> <b class='text-gray-200'>房价</b></div>
+      <div class='text-gray-400'>全国商品房平均销售价格等，见宏观数据面板"房价"图。来源：国家统计局（销售额/销售面积）、中指研究院百城房价指数。</div>
+      <div class='source-tag'><a target='_blank' href='https://www.stats.gov.cn/'>国家统计局</a></div>
+    </div>
+
+    <div class='app-item' id='app-corpus'>
+      <div class='mb-1'><span class='cred-badge cred-infer' style='cursor:default'>推测</span> <b class='text-gray-200'>所需储蓄额 / 每月需存</b></div>
+      <div class='text-gray-400'>由上述各项（支出、养老金、收益率、通胀、寿命）按现金流模型倒推，非统计值。公式见各模块下方：$C=-F_T/(1+r)^T$，每月需存 $D$ 由 $C$ 反解。结果随假设变化。</div>
+    </div>
+
+    <div class='app-item' id='app-assumption'>
+      <div class='mb-1'><span class='cred-badge cred-est' style='cursor:default'>估算</span> <b class='text-gray-200'>行为假设（无官方值，可在面板调整）</b></div>
+      <div class='text-gray-400'>阶段支出系数（活跃 1.2 / 衰退 1.0 / 护理 0.7）、丧偶期支出比例（默认 0.65）、资产等效利率公式 $r_{eq}=r-\tfrac12\sigma^2-0.1\,MDD-\ell+b$，均为演示性假设，非实证数据。</div>
+    </div>
+
+  </div>
+</div>

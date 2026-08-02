@@ -86,3 +86,70 @@ select {
   margin-top: 4px;
 }
 .source-tag a { color: #64748b; text-decoration: underline; }
+
+/* 数据可信度徽标：真实 / 推测 / 估算 */
+.cred-badge {
+  display: inline-block;
+  font-size: 10px;
+  line-height: 1;
+  padding: 3px 7px;
+  border-radius: 9px;
+  vertical-align: middle;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  position: relative;
+  border: 1px solid transparent;
+}
+.cred-real  { background: rgba(52,211,153,0.15); color: #34d399; border-color: rgba(52,211,153,0.4); }
+.cred-infer { background: rgba(251,191,36,0.15); color: #fbbf24; border-color: rgba(251,191,36,0.4); }
+.cred-est   { background: rgba(233,69,96,0.15);  color: #f87171; border-color: rgba(233,69,96,0.4); }
+/* hover 提示 */
+.cred-badge:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 8px 10px;
+  width: 260px;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+  white-space: normal;
+  text-align: left;
+  z-index: 50;
+  pointer-events: none;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+.cred-badge:hover::before {
+  content: '';
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #334155;
+  z-index: 50;
+}
+
+/* 附录条目：点击徽标跳转后高亮 */
+.app-item {
+  scroll-margin-top: 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(71,85,105,0.25);
+  background: rgba(15,16,32,0.35);
+}
+.app-item:target {
+  animation: appflash 2.5s ease-out;
+  border-color: #e94560;
+}
+@keyframes appflash {
+  0%   { background: rgba(233,69,96,0.35); }
+  100% { background: rgba(15,16,32,0.35); }
+}

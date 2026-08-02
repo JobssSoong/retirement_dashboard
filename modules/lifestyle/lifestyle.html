@@ -3,7 +3,7 @@
     <div class='space-y-5'>
       <h3 class='text-lg font-semibold text-white border-l-4 border-[#e94560] pl-3'>退休生活质量模拟器</h3>
       <div>
-        <label class='block text-sm text-gray-300 mb-1'>生活水平 <span class='text-xs text-gray-500'>（家庭·两人·当前购买力）</span></label>
+        <label class='block text-sm text-gray-300 mb-1'>生活水平 <span class='text-xs text-gray-500'>（家庭·两人·当前购买力）</span> <a class='cred-badge cred-infer' href='#app-lifestyle' data-tip='对齐国家统计局居民消费支出分位推算（非直接统计）。点击查看依据'>推测</a></label>
         <select id='lifestyleSelect'>
           <option value='basic'>基础生活 (6万/年)</option>
           <option value='normal'>普通生活 (12万/年)</option>
@@ -14,7 +14,7 @@
         <div class='text-xs text-gray-500 mt-1'>退休时约 <span id='lifestyleRetireNominal' class='text-[#e94560] font-mono'>--</span>/年（账面，按通胀推算）</div>
       </div>
       <div>
-        <label class='block text-sm text-gray-300 mb-1'>养老金身份</label>
+        <label class='block text-sm text-gray-300 mb-1'>养老金身份 <a class='cred-badge cred-est' href='#app-pension' data-tip='替代率为行业白皮书/政策设计值，人社部不公布。点击查看'>估算</a></label>
         <select id='pensionTypeSelect'>
           <option value='none'>无养老金</option>
           <option value='resident'>城乡居民（月均约 220 元）</option>
@@ -29,7 +29,7 @@
         <div class='text-xs text-gray-500 mt-1'>退休时约 <span id='pensionRetireNominal' class='text-[#e94560] font-mono'>--</span>/月（账面）</div>
       </div>
       <div>
-        <label class='block text-sm text-gray-300 mb-1'>医保有效报销率 <span class='text-xs text-gray-500'>（占总费用，非政策范围内）</span></label>
+        <label class='block text-sm text-gray-300 mb-1'>医保有效报销率 <span class='text-xs text-gray-500'>（占总费用，非政策范围内）</span> <a class='cred-badge cred-real' href='#app-insurance' data-tip='国家医保局统计公报：退休住院率49%、次均住院1.2万。点击查看'>真实</a></label>
         <select id='insuranceSelect'>
           <option value='0'>无医保（全额自付）</option>
           <option value='0.5'>居民医保（约 50%）</option>
@@ -46,7 +46,7 @@
         </select>
       </div>
       <div>
-        <label class='block text-sm text-gray-300 mb-1'>护理方案 <span class='text-xs text-gray-500'>（每人·月·当前购买力，护理期按在世人数叠加）</span></label>
+        <label class='block text-sm text-gray-300 mb-1'>护理方案 <span class='text-xs text-gray-500'>（每人·月·当前购买力，护理期按在世人数叠加）</span> <a class='cred-badge cred-est' href='#app-care' data-tip='民政部未发布全国月费中位数，为市场调研区间。点击查看'>估算</a></label>
         <select id='careSelect'>
           <option value='home'>居家护理 (6,000/月)</option>
           <option value='normal'>普通养老院 (8,000/月)</option>
@@ -56,7 +56,7 @@
         <div class='text-xs text-gray-500 mt-1'>退休时约 <span id='careRetireNominal' class='text-[#e94560] font-mono'>--</span>/月（账面，按医疗通胀）</div>
       </div>
       <div>
-        <label class='block text-sm text-gray-300 mb-1'>医疗大额情景 <span class='text-xs text-gray-500'>（每人·当前购买力，事件年按在世人数叠加）</span></label>
+        <label class='block text-sm text-gray-300 mb-1'>医疗大额情景 <span class='text-xs text-gray-500'>（每人·当前购买力，事件年按在世人数叠加）</span> <a class='cred-badge cred-infer' href='#app-critical' data-tip='依据重疾行业读本（恶性肿瘤22-80万等），非官方统计。点击查看'>推测</a></label>
         <select id='medicalSelect'>
           <option value='none'>无大额医疗</option>
           <option value='general'>一般医疗 (每5年20万)</option>
@@ -66,13 +66,13 @@
         <div class='text-xs text-gray-500 mt-1'>退休时约 <span id='medicalRetireNominal' class='text-[#e94560] font-mono'>--</span>（账面，按医疗通胀）</div>
       </div>
       <div>
-        <div class='flex justify-between text-sm mb-1'><span class='text-gray-300'>本人预期寿命</span><span class='text-[#e94560] font-mono' id='lifeExpectancyValue'>--</span></div>
+        <div class='flex justify-between text-sm mb-1'><span class='text-gray-300'>本人预期寿命 <a class='cred-badge cred-real' href='#app-lifeexp' data-tip='卫健委2023人均预期寿命78.6岁。点击查看'>真实</a></span><span class='text-[#e94560] font-mono' id='lifeExpectancyValue'>--</span></div>
         <input id='lifeExpectancySlider' type='range' class='w-full'>
       </div>
       <div class='border-t border-gray-700/40 pt-4 space-y-4'>
         <div class='text-xs text-gray-400 font-medium'>配偶</div>
         <div>
-          <label class='block text-sm text-gray-300 mb-1'>配偶养老金</label>
+          <label class='block text-sm text-gray-300 mb-1'>配偶养老金 <a class='cred-badge cred-est' href='#app-pension' data-tip='替代率为行业估算值。点击查看'>估算</a></label>
           <select id='spousePensionSelect'>
             <option value='none'>无养老金</option>
             <option value='resident'>城乡居民（约 220 元）</option>

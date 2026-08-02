@@ -1,5 +1,5 @@
 <div class='card p-5 relative overflow-hidden'>
-  <div class='text-sm text-gray-400 mb-1'>所需养老储蓄额<span class='text-gray-600'>（家庭·购买力）</span></div>
+  <div class='text-sm text-gray-400 mb-1'>所需养老储蓄额<span class='text-gray-600'>（家庭·购买力）</span> <a class='cred-badge cred-infer' href='#app-corpus' data-tip='由支出/养老金/收益率/寿命按现金流模型倒推，非统计值。点击查看公式'>推测</a></div>
   <div class='text-2xl md:text-3xl font-bold text-white kpi-number' id='corpusReal'>--</div>
   <div class='text-xs text-gray-500 mt-2'>退休时账面金额：<span id='corpusNominal' class='text-[#e94560] font-mono'>--</span></div>
   <div class='text-xs text-gray-400 mt-1'>当前已攒 <span id='savingsRatio' class='font-mono'>--</span></div>
@@ -9,7 +9,7 @@
   </div>
 </div>
 <div class='card p-5'>
-  <div class='text-sm text-gray-400 mb-1'>家庭每月需存<span class='text-gray-600'>（购买力·每月一样）</span></div>
+  <div class='text-sm text-gray-400 mb-1'>家庭每月需存<span class='text-gray-600'>（购买力·每月一样）</span> <a class='cred-badge cred-infer' href='#app-corpus' data-tip='由所需储蓄额反解，模型推算值。点击查看'>推测</a></div>
   <div class='text-2xl md:text-3xl font-bold text-[#e94560] kpi-number' id='depositRealMonthly'>--</div>
   <div class='text-xs text-gray-500 mt-2' id='depositAnnual'>--</div>
   <div class='formula'>
