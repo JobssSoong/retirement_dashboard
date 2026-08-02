@@ -50,6 +50,64 @@
       <div data-module='heatmap'></div>
     </div>
 
+    <section class='card p-5'>
+      <h3 class='text-lg font-semibold text-white border-l-4 border-[#e94560] pl-3 mb-1'>附录 · 数据来源与假设依据</h3>
+      <p class='text-xs text-gray-500 mb-4'>本看板所用关键参数的真实数值与来源。标注「估算/假设」者为无官方单一权威值、依据公开数据推算。</p>
+      <div class='grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-xs'>
+
+        <div>
+          <div class='text-gray-300 font-medium mb-1'>生活水平档位（家庭·两人·当前购买力）</div>
+          <div class='text-gray-400'>基础6 / 普通12 / 舒适20 / 品质35 / 奢侈60 万·年。对齐统计局居民消费：全国人均 2.82万、城镇 3.30万（2024）。<a class='underline' target='_blank' href='https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202501/t20250117_1958332.html'>国家统计局2024居民收支</a></div>
+        </div>
+
+        <div>
+          <div class='text-gray-300 font-medium mb-1'>养老护理价格（每人·月，市场调研区间）</div>
+          <div class='text-gray-400'>居家6千 / 普通养老院8千 / 中高端社区2万 / 高端护理院3万。民政部未发布全国月费中位数，为市场调研区间。<a class='underline' target='_blank' href='http://mzj.gz.gov.cn/dt/mtgz/content/post_10375275.html'>2024国家老龄事业公报</a></div>
+        </div>
+
+        <div>
+          <div class='text-gray-300 font-medium mb-1'>年人均医疗总费用（毛额·按有效报销率计自付）</div>
+          <div class='text-gray-400'>活跃1.5 / 衰退2.5 / 护理3.5 万·年·人。全国人均卫生总费用 6,454元（2024），老年人约为全人群2倍（估算）。<a class='underline' target='_blank' href='https://www.nhc.gov.cn/guihuaxxs/c100133/202512/f1c3a3c617484a27a1a26a468afbaeee'>卫健委2024公报</a></div>
+        </div>
+
+        <div>
+          <div class='text-gray-300 font-medium mb-1'>重疾单次治疗费用（总费用，按有效自付率计入）</div>
+          <div class='text-gray-400'>一般20万 / 较高50万 / 严重80万。恶性肿瘤等重疾区间 22–80万，行业读本（非官方统计）。<a class='underline' target='_blank' href='https://www.nfra.gov.cn/cn/view/pages/ItemDetail.html?docId=939848&amp;itemId=926'>金融监管总局重疾表2020</a></div>
+        </div>
+
+        <div>
+          <div class='text-gray-300 font-medium mb-1'>医保有效报销率（占总费用）</div>
+          <div class='text-gray-400'>居民约50% / 职工约60% / 补充约75%。退休人员住院率49%、次均住院1.2万（2023医保公报）。<a class='underline' target='_blank' href='https://www.nhsa.gov.cn/art/2025/7/14/art_7_17248.html'>国家医保局2024公报</a></div>
+        </div>
+
+        <div>
+          <div class='text-gray-300 font-medium mb-1'>健康预期寿命与阶段划分</div>
+          <div class='text-gray-400'>HALE≈68.7岁（WHO 2019），带病生存约8-9年；据此划分活跃&lt;73、衰退73-83、护理≥83。<a class='underline' target='_blank' href='https://data.who.int/countries/156'>WHO China</a></div>
+        </div>
+
+        <div>
+          <div class='text-gray-300 font-medium mb-1'>养老金替代率（研究/政策参考值）</div>
+          <div class='text-gray-400'>职工约45%、机关事业约70%（含职业年金），国际警戒线55%。人社部公报不公布，为行业估算。<a class='underline' target='_blank' href='https://cpic.com.cn/c/2024-06-26/1863517.shtml'>养老金金融白皮书</a></div>
+        </div>
+
+        <div>
+          <div class='text-gray-300 font-medium mb-1'>人口结构</div>
+          <div class='text-gray-400'>UN World Population Prospects 2024 中方案（1950–2090），十年锚点真实、中间年份线性插值；2020 与七普核对一致。<a class='underline' target='_blank' href='https://population.un.org/wpp/'>UN WPP</a></div>
+        </div>
+
+        <div>
+          <div class='text-gray-300 font-medium mb-1'>国内总储蓄率 / CPI / GDP / M2 / 存款利率</div>
+          <div class='text-gray-400'>储蓄率 World Bank NY.GDS.TOTL.ZS；CPI/GDP 统计局；M2/存款利率 人民银行。<a class='underline' target='_blank' href='https://data.worldbank.org/indicator/NY.GDS.TOTL.ZS?locations=CN'>World Bank</a></div>
+        </div>
+
+        <div>
+          <div class='text-gray-300 font-medium mb-1'>行为假设（无官方值，可调）</div>
+          <div class='text-gray-400'>阶段支出系数（活跃1.2/衰退1.0/护理0.7）、丧偶期支出比例（默认65%）、资产等效利率公式，均为演示性假设，可在面板内调整。</div>
+        </div>
+
+      </div>
+    </section>
+
     <footer class='text-center text-xs text-gray-500 py-6 space-y-2'>
       <p>数据来源：国家统计局、中国人民银行、联合国人口司（UN World Population Prospects 2024）；最后更新时间：2026-07-31。</p>
       <p>免责声明：本看板仅供参考，不构成任何投资建议。实际投资收益、通胀水平及寿命存在重大不确定性，请结合自身情况谨慎决策。</p>

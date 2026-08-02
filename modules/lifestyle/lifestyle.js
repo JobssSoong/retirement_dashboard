@@ -117,11 +117,21 @@ Dashboard.register('lifestyle', (() => {
       spouseLifeSlider.addEventListener('input', () => { state.spouse.lifeExpectancy = parseInt(spouseLifeSlider.value); Store.changed(); });
       const survSlider = root.querySelector('#survivorSlider');
       survSlider.addEventListener('input', () => { state.survivorFactor = parseInt(survSlider.value) / 100; Store.changed(); });
+
+      const bindPhaseMul = (id, key) => {
+        const el = root.querySelector('#' + id);
+        el.addEventListener('change', () => { state.phaseMul[key] = Math.max(0, parseFloat(el.value) || 0); Store.changed(); });
+      };
+      bindPhaseMul('phaseMulActive', 'active');
+      bindPhaseMul('phaseMulDecline', 'decline');
+      bindPhaseMul('phaseMulCare', 'care');
     },
 
     update(s, root) {
       // 同步本人控件
       root.querySelector('#lifestyleSelect').value = s.lifestyle;
+      const lifeRetireNominal = lifestyleOptions[s.lifestyle] * Math.pow(1 + s.inflation, yearsToRetire(s));
+      root.querySelector('#lifestyleRetireNominal').textContent = fmtWan(lifeRetireNominal);
       root.querySelector('#careSelect').value = s.careType;
       root.querySelector('#medicalSelect').value = s.medicalScenario;
       root.querySelector('#pensionTypeSelect').value = s.pensionType;
@@ -137,6 +147,9 @@ Dashboard.register('lifestyle', (() => {
       root.querySelector('#spouseLifeValue').textContent = s.spouse.lifeExpectancy + ' 岁';
       root.querySelector('#survivorSlider').value = Math.round(s.survivorFactor * 100);
       root.querySelector('#survivorValue').textContent = Math.round(s.survivorFactor * 100) + '%';
+      root.querySelector('#phaseMulActive').value = s.phaseMul.active;
+      root.querySelector('#phaseMulDecline').value = s.phaseMul.decline;
+      root.querySelector('#phaseMulCare').value = s.phaseMul.care;
 
       renderLifestyleCouple(s, root, chart, breakdown);
     },

@@ -27,13 +27,19 @@ function calculateRetirementPath(startAge, targetAge, annualDeposit, currentSavi
 }
 
 // 退休阶段（按绝对年龄划分）
+// 三阶段（按年龄，参考健康预期寿命 HALE≈69、带病生存约8-9年）：活跃<73、衰退73-83、护理≥83
+// medical = 年人均医疗总费用（万元/人·毛额，按有效报销率计自付）
 const RETIREMENT_PHASES = [
-  {key:'active',  name:'健康活跃期', maxAge:75,  baseMul:1.2, medical:3,  care:false},
-  {key:'decline', name:'缓慢衰退期', maxAge:85,  baseMul:1.0, medical:6,  care:false},
-  {key:'care',    name:'护理依赖期', maxAge:1e9, baseMul:0.7, medical:10, care:true}
+  {key:'active',  name:'健康活跃期', maxAge:73,  medical:1.5, care:false},
+  {key:'decline', name:'缓慢衰退期', maxAge:83,  medical:2.5, care:false},
+  {key:'care',    name:'护理依赖期', maxAge:1e9, medical:3.5, care:true}
 ];
 function phaseOfAge(age) {
   return RETIREMENT_PHASES.find(p => age < p.maxAge) || RETIREMENT_PHASES[RETIREMENT_PHASES.length - 1];
+}
+// 阶段生活支出系数（行为假设，可由 state.phaseMul 调整）
+function phaseBaseMul(s, ph) {
+  return (s && s.phaseMul && s.phaseMul[ph.key] != null) ? s.phaseMul[ph.key] : ({active:1.2, decline:1.0, care:0.7}[ph.key]);
 }
 
 // 退休期逐年「净现金流」（不含初始本金）：收入=养老金，支出=生活+医疗自付+护理
@@ -49,7 +55,7 @@ function retirementNetFlows(s) {
   const flows = [];
   for (let y = 0; s.targetAge + y < s.lifeExpectancy; y++) {
     const ph = phaseOfAge(s.targetAge + y);
-    const base = lifestyleAnnual * ph.baseMul * Math.pow(1 + infl, y);
+    const base = lifestyleAnnual * phaseBaseMul(s, ph) * Math.pow(1 + infl, y);
     const medicalNet = ph.medical * Math.pow(1 + medInfl, y) * (1 - insRate);
     let extraMedical = 0;
     if (medical.freq > 0 && y > 0 && y % medical.freq === 0) {
@@ -156,7 +162,8 @@ function coupleSolve(s) {
       if (y >= R_first && numAlive > 0) {
         const survMul = numAlive === 2 ? 1 : surv;
         const older = Math.max(aAlive ? aAge : 0, bAlive ? bAge : 0);
-        living = lifeH * survMul * phaseOfAge(older).baseMul * Math.pow(1 + infl, y);
+        const phOlder = phaseOfAge(older);
+        living = lifeH * survMul * phaseBaseMul(s, phOlder) * Math.pow(1 + infl, y);
       }
       // 医疗/护理按在世者本人叠加
       let med = 0, care = 0;

@@ -62,7 +62,9 @@ const m2gdpData = [
 ];
 
 const lifestyleOptions = {basic:6,normal:12,comfortable:20,premium:35,luxury:60};
-const careOptions = {home:0.6,normal:1,mid:2.5,high:5};
+// 护理费（每人·月，当前购买力）。来源：民政部/市场调研区间（无全国官方中位数）
+const careOptions = {home:0.6,normal:0.8,mid:2.0,high:3.0};
+// 重疾单次治疗总费用（万元，当前购买力），医保报销后按有效自付率计入。来源：重疾行业读本
 const medicalOptions = {none:{freq:0,base:0},general:{freq:5,base:20},high:{freq:3,base:50},severe:{freq:2,base:80}};
 
 const assetParams = {
@@ -93,9 +95,11 @@ const defaultState = {
   // 退休模拟器（决定"怎么花"，从而倒推所需储蓄额与每月需存）
   pensionType: 'employee',     // none / resident / employee / civil
   pensionMonthly: 3000,        // 月养老金（元）
-  insuranceRate: 0.8,          // 医保报销比例
+  insuranceRate: 0.6,          // 医保有效报销率（占总费用）
   medicalInflation: 0.03,      // 医疗通胀率
   lifeExpectancy: 80,          // 预期寿命（岁）
+  // 三阶段支出系数（行为假设，可调）
+  phaseMul: {active:1.2, decline:1.0, care:0.7},
   // 夫妻模式：配偶参数 + 丧偶期支出系数
   spouse: {
     currentAge: 33,
