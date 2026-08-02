@@ -82,7 +82,7 @@ Dashboard.register('growth', (() => {
         {name: '生活支出', type: 'bar', yAxisIndex: 1, stack: 'exp', data: livingBars, itemStyle: {color: '#60a5fa'}},
         {name: '医疗支出', type: 'bar', yAxisIndex: 1, stack: 'exp', data: medicalBars, itemStyle: {color: '#f472b6'}},
         {name: '护理支出', type: 'bar', yAxisIndex: 1, stack: 'exp', data: careBars, itemStyle: {color: '#fbbf24', borderRadius: [3,3,0,0]}},
-        {name: '账户余额', type: 'line', yAxisIndex: 0, smooth: true, symbol: 'none', data: balances, lineStyle: {color: '#e94560', width: 3}, itemStyle: {color: '#e94560'}, areaStyle: {color: 'rgba(233,69,96,0.10)'},
+        {name: '账户余额', type: 'line', yAxisIndex: 0, smooth: true, symbol: 'none', data: balances, lineStyle: {color: '#2dd4bf', width: 3}, itemStyle: {color: '#2dd4bf'}, areaStyle: {color: 'rgba(45,212,191,0.10)'},
           markLine: {silent: true, symbol: 'none', data: [
             {xAxis: String(retireAYear), lineStyle: {color: '#60a5fa', type: 'dashed'}, label: {formatter: '本人退休 ' + s.targetAge + '岁', color: '#60a5fa'}},
             {xAxis: String(retireBYear), lineStyle: {color: '#f472b6', type: 'dashed'}, label: {formatter: '配偶退休 ' + s.spouse.targetAge + '岁', color: '#f472b6'}},
