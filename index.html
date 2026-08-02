@@ -68,6 +68,11 @@
       // 窗口尺寸变化 → 通知各面板重置图表尺寸
       window.addEventListener('resize', () => Dashboard.resizers.forEach(fn => fn && fn()));
 
+      // 同步 range 滑块的渐变填充（拖动时实时 + 各面板更新后）
+      const updFill = el => { const min = +el.min || 0, max = +el.max || 100; el.style.setProperty('--p', ((+el.value - min) / (max - min) * 100) + '%'); };
+      document.addEventListener('input', e => { if (e.target && e.target.type === 'range') updFill(e.target); });
+      Store.subscribe(() => document.querySelectorAll('#dashboard input[type=range]').forEach(updFill));
+
       // header 交互
       document.getElementById('currentDate').textContent = new Date().toLocaleDateString('zh-CN', {year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'});
       document.getElementById('refreshBtn').addEventListener('click', () => Store.changed());

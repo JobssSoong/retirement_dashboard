@@ -106,14 +106,14 @@ Dashboard.register('lifestyle', (() => {
       pensionInput.addEventListener('change', () => { state.pensionMonthly = Math.max(0, parseFloat(pensionInput.value) || 0); Store.changed(); });
 
       const lifeSlider = root.querySelector('#lifeExpectancySlider');
-      lifeSlider.min = 75; lifeSlider.max = 95; lifeSlider.step = 1;
+      lifeSlider.min = 75; lifeSlider.max = 105; lifeSlider.step = 1;
       lifeSlider.addEventListener('input', () => { state.lifeExpectancy = parseInt(lifeSlider.value); Store.changed(); });
 
       bind(root, 'spousePensionSelect', v => { state.spouse.pensionType = v; state.spouse.pensionMonthly = spousePresets[v]; Store.changed(); });
       const spousePensionInput = root.querySelector('#spousePensionInput');
       spousePensionInput.addEventListener('change', () => { state.spouse.pensionMonthly = Math.max(0, parseFloat(spousePensionInput.value) || 0); Store.changed(); });
       const spouseLifeSlider = root.querySelector('#spouseLifeSlider');
-      spouseLifeSlider.min = 75; spouseLifeSlider.max = 95; spouseLifeSlider.step = 1;
+      spouseLifeSlider.min = 75; spouseLifeSlider.max = 105; spouseLifeSlider.step = 1;
       spouseLifeSlider.addEventListener('input', () => { state.spouse.lifeExpectancy = parseInt(spouseLifeSlider.value); Store.changed(); });
       const survSlider = root.querySelector('#survivorSlider');
       survSlider.addEventListener('input', () => { state.survivorFactor = parseInt(survSlider.value) / 100; Store.changed(); });

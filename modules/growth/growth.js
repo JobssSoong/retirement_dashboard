@@ -82,6 +82,17 @@ Dashboard.register('growth', (() => {
       const j = coupleSolve(s);
       root.querySelector('#growthDepositReadout').textContent = Math.round(j.deposit.realMonthly * 10000).toLocaleString('zh-CN') + ' 元/月（购买力恒定）';
       renderChart(s, j);
+
+      // 通胀率提示：近10年CPI均值参考
+      const cpiAvg = cpiData.slice(-10).reduce((a, d) => a + d.cpi, 0) / Math.min(10, cpiData.length);
+      root.querySelector('#inflationHint').textContent = '参考：近10年 CPI 年均约 ' + cpiAvg.toFixed(1) + '%；长期保守可取 3%';
+      // 收益率提示：偏保守/稳健/激进
+      const rr = s.returnRate;
+      const rrLabel = rr < 0.03 ? '偏保守（类定存/国债，跑不赢通胀）'
+        : rr < 0.05 ? '稳健（固收+/理财）'
+        : rr < 0.08 ? '较积极（含权益/红利）'
+        : '激进（高权益，波动大）';
+      root.querySelector('#returnRateHint').textContent = '当前 ' + rrLabel + '；实际能否长期达到存在不确定性';
     },
 
     resize() { chart && chart.resize(); }
