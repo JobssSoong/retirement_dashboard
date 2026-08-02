@@ -1,0 +1,105 @@
+<div class='card p-5'>
+  <div class='grid grid-cols-1 lg:grid-cols-3 gap-6'>
+    <div class='space-y-5'>
+      <h3 class='text-lg font-semibold text-white border-l-4 border-[#e94560] pl-3'>退休生活质量模拟器</h3>
+      <div>
+        <label class='block text-sm text-gray-300 mb-1'>生活水平</label>
+        <select id='lifestyleSelect'>
+          <option value='basic'>基础生存 (6万/年)</option>
+          <option value='normal'>普通生活 (12万/年)</option>
+          <option value='comfortable'>舒适养老 (20万/年)</option>
+          <option value='premium'>品质养老 (35万/年)</option>
+          <option value='luxury'>奢侈养老 (60万/年)</option>
+        </select>
+      </div>
+      <div>
+        <label class='block text-sm text-gray-300 mb-1'>养老金身份</label>
+        <select id='pensionTypeSelect'>
+          <option value='none'>无养老金</option>
+          <option value='resident'>城乡居民（月均约 220 元）</option>
+          <option value='employee'>企业职工（月均约 3000 元）</option>
+          <option value='civil'>机关事业（月均约 5500 元）</option>
+        </select>
+        <div class='flex items-center gap-2 mt-2'>
+          <span class='text-xs text-gray-400'>月养老金</span>
+          <input id='pensionInput' type='number' min='0' max='30000' step='100' class='w-28 text-sm'>
+          <span class='text-xs text-gray-500'>元/月（可手动调整）</span>
+        </div>
+      </div>
+      <div>
+        <label class='block text-sm text-gray-300 mb-1'>医保报销比例</label>
+        <select id='insuranceSelect'>
+          <option value='0'>无医保（全额自付）</option>
+          <option value='0.7'>居民医保（约 70%）</option>
+          <option value='0.8'>职工医保（约 80%）</option>
+          <option value='0.9'>含补充医保（约 90%）</option>
+        </select>
+      </div>
+      <div>
+        <label class='block text-sm text-gray-300 mb-1'>医疗通胀率</label>
+        <select id='medicalInflationSelect'>
+          <option value='0.015'>较低（1.5%/年）</option>
+          <option value='0.03'>基准（3%/年）</option>
+          <option value='0.05'>较高（5%/年）</option>
+        </select>
+      </div>
+      <div>
+        <label class='block text-sm text-gray-300 mb-1'>护理方案</label>
+        <select id='careSelect'>
+          <option value='home'>居家护理 (6,000/月)</option>
+          <option value='normal'>普通养老院 (1万/月)</option>
+          <option value='mid'>中高端社区 (2.5万/月)</option>
+          <option value='high'>高端护理院 (5万/月)</option>
+        </select>
+      </div>
+      <div>
+        <label class='block text-sm text-gray-300 mb-1'>医疗大额情景</label>
+        <select id='medicalSelect'>
+          <option value='none'>无大额医疗</option>
+          <option value='general'>一般医疗 (每5年20万)</option>
+          <option value='high'>较高医疗 (每3年50万)</option>
+          <option value='severe'>严重医疗 (每2年80万)</option>
+        </select>
+      </div>
+      <div>
+        <div class='flex justify-between text-sm mb-1'><span class='text-gray-300'>预期寿命</span><span class='text-[#e94560] font-mono' id='lifeExpectancyValue'>--</span></div>
+        <input id='lifeExpectancySlider' type='range' class='w-full'>
+      </div>
+    </div>
+    <div class='lg:col-span-2 space-y-4'>
+      <div class='grid grid-cols-3 gap-4'>
+        <div class='bg-[#16213e]/50 rounded-lg p-4 text-center border border-gray-700/50'>
+          <div class='text-xs text-gray-400'>退休期年均支出（账面）</div>
+          <div id='avgExpense' class='text-2xl md:text-3xl font-bold text-[#e94560] mt-1'>--</div>
+          <div class='text-xs text-gray-500 mt-1'>购买力 <span id='avgExpenseReal'>--</span></div>
+        </div>
+        <div class='bg-[#16213e]/50 rounded-lg p-4 text-center border border-gray-700/50'>
+          <div class='text-xs text-gray-400'>养老金覆盖率</div>
+          <div id='pensionCoverage' class='text-2xl md:text-3xl font-bold text-white mt-1'>--</div>
+          <div class='text-xs text-gray-500 mt-1'>年均养老金 <span id='pensionAnnual'>--</span></div>
+        </div>
+        <div class='bg-[#16213e]/50 rounded-lg p-4 text-center border border-gray-700/50'>
+          <div class='text-xs text-gray-400'>退休期累计支出（账面）</div>
+          <div id='totalExpense' class='text-2xl md:text-3xl font-bold text-white mt-1'>--</div>
+          <div class='text-xs text-gray-500 mt-1'>购买力 <span id='totalExpenseReal'>--</span></div>
+        </div>
+      </div>
+      <div class='text-xs text-gray-500 mt-2'>养老金覆盖率 = 退休期养老金总收入 ÷ 累计支出，反映社保养老金能覆盖多少比例开销；账面含通胀，购买力为折回当前的金额。</div>
+      <div>
+        <div id='lifestyleChart' class='w-full h-[260px] rounded-xl overflow-hidden'></div>
+        <div class='text-xs text-gray-500 mt-1'>退休消耗期：曲线=账户余额（左轴，按所需储蓄额支取至预期寿命归零），柱=当年支出（右轴）。虚线为预期寿命。</div>
+      </div>
+      <div>
+        <div id='lifestyleBreakdown' class='w-full h-[200px] rounded-xl overflow-hidden'></div>
+        <div class='text-xs text-gray-500 mt-1'>三阶段（活跃 / 衰退 / 护理）年均支出构成。</div>
+      </div>
+      <div id='riskBar' class='w-full h-10 rounded-lg flex items-center justify-center text-sm font-medium transition'>--</div>
+      <div class='formula'>
+        <span class="var">逐年余额</span> $B_t=B_{t-1}(1+r)+I_t-E_t$，
+        $I_t$=养老金收入、$E_t$=生活+医疗自付+护理；医疗项按 $\text{医保报销比例}\,\rho$ 取自付 $(1-\rho)\,(1+i_m)^t$<br>
+        <span class="var">阶段</span>按年龄划分：活跃 $<75$、衰退 $75\sim85$、护理 $\ge85$，至预期寿命止
+      </div>
+      <div class='source-tag'>参考：中国人均预期寿命约 78.6 岁（2023，卫健委）；养老金替代率为研究估算值（职工约 45%、机关事业约 70%，国际警戒线 55%）；医保报销为政策范围内住院比例（国家医保局）。</div>
+    </div>
+  </div>
+</div>

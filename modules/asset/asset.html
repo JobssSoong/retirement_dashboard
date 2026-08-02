@@ -1,0 +1,33 @@
+<div class='card p-5'>
+  <h3 class='text-lg font-semibold text-white border-l-4 border-[#e94560] pl-3 mb-4'>资产配置建议器</h3>
+  <div class='grid grid-cols-1 md:grid-cols-2 gap-4'>
+    <div>
+      <div id='assetPieChart' class='h-[300px] rounded-xl overflow-hidden'></div>
+      <div class='text-xs text-gray-500 mt-1 text-center'>当前资产配置比例；等效利率已考虑波动、回撤、流动性及行为溢价。</div>
+    </div>
+    <div class='space-y-3 overflow-y-auto max-h-[300px] pr-1' id='assetControls'></div>
+  </div>
+  <div class='formula'>
+    <span class="var">等效利率</span>（演示性估算，非精确预测）：
+    $r_{eq}=r-\tfrac{1}{2}\sigma^{2}-0.1\cdot MDD-\ell+b$，
+    其中 $r$=名义收益率、$\sigma$=波动率、$MDD$=最大回撤、$\ell$=流动性折价、$b$=行为溢价<br>
+    <span class="var">总等效利率</span> $=\sum w_i\,r_{eq,i}-\pi$，$\pi$=通胀率
+  </div>
+  <div id='assetDepositChart' class='w-full h-[200px] rounded-xl overflow-hidden mt-5'></div>
+  <div class='flex justify-between text-xs text-gray-500 mt-2'>
+    <span>账面平均每年：<span id='avgNominalDeposit' class='text-[#e94560] font-mono'>--</span></span>
+    <span>实际购买力平均每年：<span id='avgRealDeposit' class='text-[#e94560] font-mono'>--</span></span>
+  </div>
+  <div class='text-xs text-gray-600 mt-1'>该曲线按当前资产配置的等效收益率测算“从零开始每年应存多少”，与上方“投资收益率”输入和“每年存入金额”相互独立，因此与“预计资金缺口”不会相等。</div>
+  <div class='mt-5 space-y-3 border-t border-gray-700/50 pt-4'>
+    <div class='flex justify-between items-center'>
+      <span class='text-sm text-gray-300'>行为溢价（自律性对保险价值的影响）</span>
+      <span id='behaviorValue' class='text-[#e94560] font-mono'>1.0%</span>
+    </div>
+    <input id='behaviorSlider' type='range' min='0' max='3' step='0.1' value='1'>
+    <div class='flex justify-between text-sm items-center'>
+      <span class='text-gray-400'>总等效利率</span>
+      <span id='totalEquivRate' class='text-[#e94560] font-bold text-lg'>--</span>
+    </div>
+  </div>
+</div>
