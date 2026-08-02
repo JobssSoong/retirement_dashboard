@@ -34,11 +34,9 @@
       <span class='text-sm text-gray-300 font-medium'>花钱期参数</span>
       <div>
         <label class='block text-xs text-gray-300 mb-0.5'>生活水平 <span class='text-gray-500'>（家庭·两人·当前购买力）</span> <a class='cred-badge cred-infer' href='#app-lifestyle' data-tip='对齐统计局居民消费支出分位推算'>推测</a></label>
-        <select id='lifestyleSelect' class='w-full text-sm'>
-          <option value='basic'>基础生活 (6万/年)</option><option value='normal'>普通生活 (12万/年)</option>
-          <option value='comfortable'>舒适养老 (20万/年)</option><option value='premium'>品质养老 (35万/年)</option><option value='luxury'>奢侈养老 (60万/年)</option>
-        </select>
-        <div class='text-[11px] text-gray-500 mt-0.5'>退休时（<span id='lifestyleRetireYear'>--</span>年）约 <span id='lifestyleRetireNominal' class='text-[#e94560] font-mono'>--</span>/年（账面）</div>
+        <input id='lifestyleSlider' type='range' class='w-full mt-1'>
+        <div class='text-[11px] text-gray-500 mt-0.5'>当前：<span id='lifestyleLabel' class='text-[#e94560] font-mono'>--</span></div>
+        <div class='text-[11px] text-gray-500'>退休时（<span id='lifestyleRetireYear'>--</span>年）约 <span id='lifestyleRetireNominal' class='text-[#e94560] font-mono'>--</span>/年（账面）</div>
       </div>
       <div class='grid grid-cols-2 gap-3'>
         <div>
@@ -61,12 +59,14 @@
       <div class='grid grid-cols-2 gap-3'>
         <div>
           <label class='block text-xs text-gray-300 mb-0.5'>护理方案 <span class='text-gray-500'>（每人·月·购买力）</span> <a class='cred-badge cred-est' href='#app-care' data-tip='市场调研区间，无官方中位数'>估算</a></label>
-          <select id='careSelect' class='w-full text-sm'><option value='self'>居家自理(0)</option><option value='daycare'>社区日托(4千)</option><option value='homehelp'>居家护工(6千)</option><option value='normal'>普通养老院(8千)</option><option value='mid'>中高端社区(2万)</option><option value='high'>高端护理院(3万)</option></select>
+          <input id='careSlider' type='range' class='w-full mt-1'>
+          <div class='text-[11px] text-gray-500 mt-0.5'>当前：<span id='careLabel' class='text-[#e94560] font-mono'>--</span></div>
           <div class='text-[11px] text-gray-500'>护理期（<span id='careRetireYear'>--</span>年）约 <span id='careRetireNominal' class='text-[#e94560] font-mono'>--</span>/月</div>
         </div>
         <div>
           <label class='block text-xs text-gray-300 mb-0.5'>重大医疗 <span class='text-gray-500'>（每人·年·购买力）</span> <a class='cred-badge cred-infer' href='#app-critical' data-tip='重疾/长期医疗，行业读本'>推测</a></label>
-          <select id='medicalSelect' class='w-full text-sm'><option value='none'>无</option><option value='low'>低(1万/年)</option><option value='mid'>中(3万/年)</option><option value='high'>高(5万/年)</option><option value='severe'>重(8万/年)</option></select>
+          <input id='medicalSlider' type='range' class='w-full mt-1'>
+          <div class='text-[11px] text-gray-500 mt-0.5'>当前：<span id='medicalLabel' class='text-[#e94560] font-mono'>--</span></div>
           <div class='text-[11px] text-gray-500'>退休时（<span id='medicalRetireYear'>--</span>年）约 <span id='medicalRetireNominal' class='text-[#e94560] font-mono'>--</span>/年</div>
         </div>
       </div>

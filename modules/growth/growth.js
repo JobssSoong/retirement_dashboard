@@ -13,6 +13,22 @@ Dashboard.register('growth', (() => {
   const presets = {conservative:{returnRate:0.02,inflation:0.03}, balanced:{returnRate:0.04,inflation:0.025}, aggressive:{returnRate:0.06,inflation:0.025}};
   const pensionPresets = {none:0, resident:220, employee:3000, civil:5500};
   const spousePresets = {none:0, resident:220, employee:2500, civil:5500};
+  // 滑块用的有序选项（key 对应 calc 里的 map，label/sub 用于显示）
+  const lifestyleChoices = [
+    {key:'basic', label:'基础生活', sub:'6万/年'}, {key:'normal', label:'普通生活', sub:'12万/年'},
+    {key:'comfortable', label:'舒适养老', sub:'20万/年'}, {key:'premium', label:'品质养老', sub:'35万/年'},
+    {key:'luxury', label:'奢侈养老', sub:'60万/年'}
+  ];
+  const careChoices = [
+    {key:'self', label:'居家自理', sub:'0'}, {key:'daycare', label:'社区日托', sub:'4千/月'},
+    {key:'homehelp', label:'居家护工', sub:'6千/月'}, {key:'normal', label:'普通养老院', sub:'8千/月'},
+    {key:'mid', label:'中高端社区', sub:'2万/月'}, {key:'high', label:'高端护理院', sub:'3万/月'}
+  ];
+  const medicalChoices = [
+    {key:'none', label:'无', sub:'0'}, {key:'low', label:'低', sub:'1万/年'},
+    {key:'mid', label:'中', sub:'3万/年'}, {key:'high', label:'高', sub:'5万/年'},
+    {key:'severe', label:'重', sub:'8万/年'}
+  ];
 
   function setValue(c, val) {
     const obj = c.group ? state[c.group] : state;
@@ -159,15 +175,21 @@ Dashboard.register('growth', (() => {
       spouseLifeSlider.addEventListener('input', () => { state.spouse.lifeExpectancy = Math.max(state.spouse.targetAge + 5, parseInt(spouseLifeSlider.value)); Store.changed(); });
 
       const bindSel = (id, fn) => root.querySelector('#' + id).addEventListener('change', e => fn(e.target.value));
-      bindSel('lifestyleSelect', v => { state.lifestyle = v; Store.changed(); });
+      // 生活/护理/重大医疗 改为滑块
+      const bindChoiceSlider = (id, choices, key) => {
+        const sl = root.querySelector('#' + id);
+        sl.min = 0; sl.max = choices.length - 1; sl.step = 1;
+        sl.addEventListener('input', () => { state[key] = choices[parseInt(sl.value)].key; Store.changed(); });
+      };
+      bindChoiceSlider('lifestyleSlider', lifestyleChoices, 'lifestyle');
+      bindChoiceSlider('careSlider', careChoices, 'careType');
+      bindChoiceSlider('medicalSlider', medicalChoices, 'medicalScenario');
       bindSel('pensionTypeSelect', v => { state.pensionType = v; state.pensionMonthly = pensionPresets[v]; Store.changed(); });
       root.querySelector('#pensionInput').addEventListener('change', e => { state.pensionMonthly = Math.max(0, parseFloat(e.target.value) || 0); Store.changed(); });
       bindSel('spousePensionSelect', v => { state.spouse.pensionType = v; state.spouse.pensionMonthly = spousePresets[v]; Store.changed(); });
       root.querySelector('#spousePensionInput').addEventListener('change', e => { state.spouse.pensionMonthly = Math.max(0, parseFloat(e.target.value) || 0); Store.changed(); });
       bindSel('insuranceSelect', v => { state.insuranceRate = parseFloat(v); Store.changed(); });
       bindSel('medicalInflationSelect', v => { state.medicalInflation = parseFloat(v); Store.changed(); });
-      bindSel('careSelect', v => { state.careType = v; Store.changed(); });
-      bindSel('medicalSelect', v => { state.medicalScenario = v; Store.changed(); });
       const surv = root.querySelector('#survivorSlider');
       surv.addEventListener('input', () => { state.survivorFactor = parseInt(surv.value) / 100; Store.changed(); });
       const bindPM = (id, key) => root.querySelector('#' + id).addEventListener('change', e => { state.phaseMul[key] = Math.max(0, parseFloat(e.target.value) || 0); Store.changed(); });
@@ -193,8 +215,19 @@ Dashboard.register('growth', (() => {
       root.querySelector('#phaseMulActive').value = s.phaseMul.active;
       root.querySelector('#phaseMulDecline').value = s.phaseMul.decline;
       root.querySelector('#phaseMulCare').value = s.phaseMul.care;
-      const sels = ['lifestyleSelect','pensionTypeSelect','spousePensionSelect','insuranceSelect','medicalInflationSelect','careSelect','medicalSelect'];
-      const vals = [s.lifestyle, s.pensionType, s.spouse.pensionType, s.insuranceRate, s.medicalInflation, s.careType, s.medicalScenario];
+      // 生活/护理/重大医疗 滑块同步 + 当前档位标签
+      const syncChoice = (id, choices, key, labelId) => {
+        const idx = Math.max(0, choices.findIndex(c => c.key === s[key]));
+        const sl = root.querySelector('#' + id); if (sl) sl.value = idx;
+        const c = choices[idx];
+        const lab = root.querySelector('#' + labelId); if (lab) lab.textContent = c.label + ' (' + c.sub + ')';
+      };
+      syncChoice('lifestyleSlider', lifestyleChoices, 'lifestyle', 'lifestyleLabel');
+      syncChoice('careSlider', careChoices, 'careType', 'careLabel');
+      syncChoice('medicalSlider', medicalChoices, 'medicalScenario', 'medicalLabel');
+      // 其余下拉
+      const sels = ['pensionTypeSelect','spousePensionSelect','insuranceSelect','medicalInflationSelect'];
+      const vals = [s.pensionType, s.spouse.pensionType, s.insuranceRate, s.medicalInflation];
       sels.forEach((id, i) => root.querySelector('#' + id).value = vals[i]);
       root.querySelector('#pensionInput').value = s.pensionMonthly;
       root.querySelector('#spousePensionInput').value = s.spouse.pensionMonthly;
