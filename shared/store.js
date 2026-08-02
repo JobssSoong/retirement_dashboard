@@ -32,6 +32,7 @@ function loadState() {
     if (typeof merged[k] !== 'number' || isNaN(merged[k])) merged[k] = defaultState[k];
   });
   delete merged.careType; delete merged.medicalScenario;  // 清理旧字段
+  if (!Array.isArray(merged.childAges)) merged.childAges = [];
   return merged;
 }
 function saveState() {

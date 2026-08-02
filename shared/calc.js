@@ -128,6 +128,19 @@ function couplePersons(s) {
     {age: s.spouse.currentAge, retire: s.spouse.targetAge, death: s.spouse.lifeExpectancy, pension: s.spouse.pensionMonthly}
   ];
 }
+// 子女养育支出（万·账面）：每个孩子在 0-22 岁抚养期内按年均均摊，按一般通胀推算
+function childCostOutflow(s, y) {
+  if (!s.childEnabled || !s.childAges || !s.childAges.length) return 0;
+  const total = childCostByTier[s.childTier] || 82;
+  const annualBase = total / 22;
+  let cost = 0;
+  s.childAges.forEach((a0, i) => {
+    const ageInY = a0 + y;
+    if (ageInY >= 0 && ageInY < 22) cost += annualBase * (childTierFactors[i] || 0.5);   // 孩次递减
+  });
+  return cost * Math.pow(1 + s.inflation, y);
+}
+
 function coupleSolve(s) {
   s = s || state;
   const [A, B] = couplePersons(s);
@@ -151,6 +164,10 @@ function coupleSolve(s) {
       let income = 0;
       if (aRet) income += (A.pension * 12 / 1e4) * Math.pow(1 + infl, y);
       if (bRet) income += (B.pension * 12 / 1e4) * Math.pow(1 + infl, y);
+      // 子女晚年支持（可选假设，仅退休期 + 已有子女）
+      if (y >= R_last && s.childEnabled && s.childAges && s.childAges.length && s.childSupport) {
+        income += s.childSupport * Math.pow(1 + infl, y);
+      }
       // 共同储蓄：两人都上班全额；首人退休后过渡期减半；两人均退休后停止
       let deposit;
       if (y < R_first) deposit = 12 * D * Math.pow(1 + infl, y);
@@ -172,9 +189,10 @@ function coupleSolve(s) {
         med += (ph.medical + medical) * Math.pow(1 + medInfl, y) * (1 - ins);  // 常规 + 重大医疗(每人每年)
         if (ph.care && careM) care += careM * 12 * Math.pow(1 + medInfl, y);
       });
-      const outflow = living + med + care;
+      const childCost = childCostOutflow(s, y);   // 子女养育支出（可选）
+      const outflow = living + med + care + childCost;
       bal = bal * (1 + r) + deposit + income - outflow;
-      traj.push({y, aAge, bAge, aAlive, bAlive, numAlive, deposit, income, living, medical: med, care, outflow, endBalance: bal});
+      traj.push({y, aAge, bAge, aAlive, bAlive, numAlive, deposit, income, living, medical: med, care, childCost, outflow, endBalance: bal});
     }
     return {traj, final: bal};
   }

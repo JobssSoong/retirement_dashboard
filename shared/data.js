@@ -129,6 +129,10 @@ const housePriceData = [
 ];
 
 // 生活/护理/重大医疗 现以连续金额(当前购买力)存于 state，档位标签由 growth.js 按区间判定
+// 养育一个孩子到22岁的总成本（万·购买力，分摊口径）。来源：育娲《中国生育成本报告2024》
+const childCostByTier = {rural:45, urbanBasic:68, urbanMid:82, tier1:120};
+// 孩次边际成本递减系数（二孩约一孩71.5%、三孩约60%）
+const childTierFactors = [1, 0.715, 0.6];
 
 const assetParams = {
   '银行定存': {rate:0.015,vol:0,dd:0,liq:0,beh:0,color:'#95a5a6'},
@@ -171,5 +175,10 @@ const defaultState = {
     pensionType: 'employee',
     pensionMonthly: 2500
   },
-  survivorFactor: 0.65         // 丧偶后家庭生活支出占两人期的比例
+  survivorFactor: 0.65,        // 丧偶后家庭生活支出占两人期的比例
+  // 子女模拟器（可选）：养育成本进主算，子女支持为可选假设
+  childEnabled: false,
+  childAges: [],               // 每个孩子当前年龄(正=已出生岁数, 负=几年后生)
+  childTier: 'urbanMid',       // rural/urbanBasic/urbanMid/tier1
+  childSupport: 0              // 假设子女晚年年均支持(万/年·购买力)，收益侧，默认0
 };
