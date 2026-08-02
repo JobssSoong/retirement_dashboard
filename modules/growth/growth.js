@@ -16,15 +16,16 @@ Dashboard.register('growth', (() => {
   };
   let chart;
 
-  function setValue(c, v) {
+  function setValue(c, val) {
     const obj = c.group ? state[c.group] : state;
-    v = Math.max(c.min, Math.min(c.max, v));
+    // clamp / round 都在滑块的原始量纲（百分比 isPct 时为 % 值）里做，最后再换算
+    let v = Math.max(c.min, Math.min(c.max, val));
     const dec = (c.step + '').includes('.') ? (c.step + '').split('.')[1].length : 0;
     v = Math.round(v * Math.pow(10, dec)) / Math.pow(10, dec);
     // 保持当前年龄 ≤ 退休年龄
     if (c.key === 'currentAge' && obj.targetAge !== undefined) v = Math.min(v, obj.targetAge);
     if (c.key === 'targetAge' && obj.currentAge !== undefined) v = Math.max(v, obj.currentAge);
-    obj[c.key] = v;
+    obj[c.key] = c.isPct ? v / 100 : v;
     Store.changed();
   }
 
@@ -58,8 +59,8 @@ Dashboard.register('growth', (() => {
         if (!slider || !input) return;
         slider.min = c.min; slider.max = c.max; slider.step = c.step;
         input.min = c.min; input.max = c.max; input.step = c.step;
-        slider.addEventListener('input', () => setValue(c, c.isPct ? parseFloat(slider.value) / 100 : parseFloat(slider.value)));
-        input.addEventListener('change', () => setValue(c, c.isPct ? parseFloat(input.value) / 100 : parseFloat(input.value)));
+        slider.addEventListener('input', () => setValue(c, parseFloat(slider.value)));
+        input.addEventListener('change', () => setValue(c, parseFloat(input.value)));
       });
       root.querySelectorAll('.preset-btn').forEach(btn => {
         btn.addEventListener('click', () => { Object.assign(state, presets[btn.dataset.preset]); Store.changed(); });
