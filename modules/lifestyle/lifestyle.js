@@ -132,6 +132,16 @@ Dashboard.register('lifestyle', (() => {
       root.querySelector('#lifestyleSelect').value = s.lifestyle;
       const lifeRetireNominal = lifestyleOptions[s.lifestyle] * Math.pow(1 + s.inflation, yearsToRetire(s));
       root.querySelector('#lifestyleRetireNominal').textContent = fmtWan(lifeRetireNominal);
+      // 各未来金额的「退休时账面」小字（购买力输入 → 按通胀/医疗通胀推算）
+      const nA = yearsToRetire(s);
+      const nB = Math.max(0, s.spouse.targetAge - s.spouse.currentAge);
+      const inflF = Math.pow(1 + s.inflation, nA);
+      const medF = Math.pow(1 + s.medicalInflation, nA);
+      root.querySelector('#pensionRetireNominal').textContent = Math.round(s.pensionMonthly * inflF).toLocaleString('zh-CN') + ' 元';
+      root.querySelector('#spousePensionRetireNominal').textContent = Math.round(s.spouse.pensionMonthly * Math.pow(1 + s.inflation, nB)).toLocaleString('zh-CN') + ' 元';
+      root.querySelector('#careRetireNominal').textContent = fmtWan(careOptions[s.careType] * medF);
+      const medOpt = medicalOptions[s.medicalScenario];
+      root.querySelector('#medicalRetireNominal').textContent = medOpt.base > 0 ? fmtWan(medOpt.base * medF) : '—';
       root.querySelector('#careSelect').value = s.careType;
       root.querySelector('#medicalSelect').value = s.medicalScenario;
       root.querySelector('#pensionTypeSelect').value = s.pensionType;

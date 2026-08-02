@@ -22,10 +22,11 @@
           <option value='civil'>机关事业（月均约 5500 元）</option>
         </select>
         <div class='flex items-center gap-2 mt-2'>
-          <span class='text-xs text-gray-400'>月养老金</span>
+          <span class='text-xs text-gray-400'>月养老金（当前购买力）</span>
           <input id='pensionInput' type='number' min='0' max='30000' step='100' class='w-28 text-sm'>
-          <span class='text-xs text-gray-500'>元/月（可手动调整）</span>
+          <span class='text-xs text-gray-500'>元/月</span>
         </div>
+        <div class='text-xs text-gray-500 mt-1'>退休时约 <span id='pensionRetireNominal' class='text-[#e94560] font-mono'>--</span>/月（账面）</div>
       </div>
       <div>
         <label class='block text-sm text-gray-300 mb-1'>医保有效报销率 <span class='text-xs text-gray-500'>（占总费用，非政策范围内）</span></label>
@@ -45,22 +46,24 @@
         </select>
       </div>
       <div>
-        <label class='block text-sm text-gray-300 mb-1'>护理方案 <span class='text-xs text-gray-500'>（每人·月，护理期按在世人数叠加）</span></label>
+        <label class='block text-sm text-gray-300 mb-1'>护理方案 <span class='text-xs text-gray-500'>（每人·月·当前购买力，护理期按在世人数叠加）</span></label>
         <select id='careSelect'>
           <option value='home'>居家护理 (6,000/月)</option>
           <option value='normal'>普通养老院 (8,000/月)</option>
           <option value='mid'>中高端社区 (2万/月)</option>
           <option value='high'>高端护理院 (3万/月)</option>
         </select>
+        <div class='text-xs text-gray-500 mt-1'>退休时约 <span id='careRetireNominal' class='text-[#e94560] font-mono'>--</span>/月（账面，按医疗通胀）</div>
       </div>
       <div>
-        <label class='block text-sm text-gray-300 mb-1'>医疗大额情景 <span class='text-xs text-gray-500'>（每人·事件年按在世人数叠加）</span></label>
+        <label class='block text-sm text-gray-300 mb-1'>医疗大额情景 <span class='text-xs text-gray-500'>（每人·当前购买力，事件年按在世人数叠加）</span></label>
         <select id='medicalSelect'>
           <option value='none'>无大额医疗</option>
           <option value='general'>一般医疗 (每5年20万)</option>
           <option value='high'>较高医疗 (每3年50万)</option>
           <option value='severe'>严重医疗 (每2年80万)</option>
         </select>
+        <div class='text-xs text-gray-500 mt-1'>退休时约 <span id='medicalRetireNominal' class='text-[#e94560] font-mono'>--</span>（账面，按医疗通胀）</div>
       </div>
       <div>
         <div class='flex justify-between text-sm mb-1'><span class='text-gray-300'>本人预期寿命</span><span class='text-[#e94560] font-mono' id='lifeExpectancyValue'>--</span></div>
@@ -77,10 +80,11 @@
             <option value='civil'>机关事业（约 5500 元）</option>
           </select>
           <div class='flex items-center gap-2 mt-2'>
-            <span class='text-xs text-gray-400'>月养老金</span>
+            <span class='text-xs text-gray-400'>月养老金（当前购买力）</span>
             <input id='spousePensionInput' type='number' min='0' max='30000' step='100' class='w-28 text-sm'>
             <span class='text-xs text-gray-500'>元/月</span>
           </div>
+          <div class='text-xs text-gray-500 mt-1'>退休时约 <span id='spousePensionRetireNominal' class='text-[#e94560] font-mono'>--</span>/月（账面）</div>
         </div>
         <div>
           <div class='flex justify-between text-sm mb-1'><span class='text-gray-300'>配偶预期寿命</span><span class='text-[#e94560] font-mono' id='spouseLifeValue'>--</span></div>
