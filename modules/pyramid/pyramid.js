@@ -13,14 +13,14 @@ Dashboard.register('pyramid', (() => {
       rootEl = root;
       chart = echarts.init(root.querySelector('#pyramidChart'), 'dashboard');
       const slider = root.querySelector('#pyramidYearSlider');
-      slider.min = 1950; slider.max = 2050; slider.step = 1;
+      slider.min = 1950; slider.max = 2090; slider.step = 1;
       slider.addEventListener('input', () => { state.pyramidYear = parseInt(slider.value); stopPlay(); Store.changed(); });
       root.querySelector('#playPyramidBtn').addEventListener('click', () => {
         if (playInterval) stopPlay();
         else {
           playInterval = setInterval(() => {
             let y = state.pyramidYear + 1;
-            if (y > 2050) y = 1950;
+            if (y > 2090) y = 1950;
             state.pyramidYear = y;
             Store.changed();
           }, 150);
