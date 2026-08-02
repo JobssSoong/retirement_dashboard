@@ -166,8 +166,9 @@ function coupleSolve(s) {
         med += ph.medical * Math.pow(1 + medInfl, y) * (1 - ins);
         if (ph.care && careM) care += careM * 12 * Math.pow(1 + medInfl, y);
       });
+      // 大额医疗：每人计（事件年按在世人数叠加）
       let extra = 0;
-      if (y >= R_first && medical.freq > 0 && y > 0 && y % medical.freq === 0) extra = medical.base * Math.pow(1 + medInfl, y) * (1 - ins);
+      if (y >= R_first && medical.freq > 0 && y > 0 && y % medical.freq === 0) extra = numAlive * medical.base * Math.pow(1 + medInfl, y) * (1 - ins);
       const outflow = living + med + care + extra;
       bal = bal * (1 + r) + deposit + income - outflow;
       traj.push({y, aAge, bAge, aAlive, bAlive, numAlive, deposit, income, living, medical: med + extra, care, outflow, endBalance: bal});

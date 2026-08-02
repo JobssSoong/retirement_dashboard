@@ -3,7 +3,7 @@
     <div class='space-y-5'>
       <h3 class='text-lg font-semibold text-white border-l-4 border-[#e94560] pl-3'>退休生活质量模拟器</h3>
       <div>
-        <label class='block text-sm text-gray-300 mb-1'>生活水平</label>
+        <label class='block text-sm text-gray-300 mb-1'>生活水平 <span class='text-xs text-gray-500'>（家庭·两人合计）</span></label>
         <select id='lifestyleSelect'>
           <option value='basic'>基础生存 (6万/年)</option>
           <option value='normal'>普通生活 (12万/年)</option>
@@ -27,7 +27,7 @@
         </div>
       </div>
       <div>
-        <label class='block text-sm text-gray-300 mb-1'>医保报销比例</label>
+        <label class='block text-sm text-gray-300 mb-1'>医保报销比例 <span class='text-xs text-gray-500'>（医疗费用可报销占比）</span></label>
         <select id='insuranceSelect'>
           <option value='0'>无医保（全额自付）</option>
           <option value='0.7'>居民医保（约 70%）</option>
@@ -36,7 +36,7 @@
         </select>
       </div>
       <div>
-        <label class='block text-sm text-gray-300 mb-1'>医疗通胀率</label>
+        <label class='block text-sm text-gray-300 mb-1'>医疗通胀率 <span class='text-xs text-gray-500'>（医疗费用年涨幅）</span></label>
         <select id='medicalInflationSelect'>
           <option value='0.015'>较低（1.5%/年）</option>
           <option value='0.03'>基准（3%/年）</option>
@@ -44,7 +44,7 @@
         </select>
       </div>
       <div>
-        <label class='block text-sm text-gray-300 mb-1'>护理方案</label>
+        <label class='block text-sm text-gray-300 mb-1'>护理方案 <span class='text-xs text-gray-500'>（每人·月，护理期按在世人数叠加）</span></label>
         <select id='careSelect'>
           <option value='home'>居家护理 (6,000/月)</option>
           <option value='normal'>普通养老院 (1万/月)</option>
@@ -53,7 +53,7 @@
         </select>
       </div>
       <div>
-        <label class='block text-sm text-gray-300 mb-1'>医疗大额情景</label>
+        <label class='block text-sm text-gray-300 mb-1'>医疗大额情景 <span class='text-xs text-gray-500'>（每人·事件年按在世人数叠加）</span></label>
         <select id='medicalSelect'>
           <option value='none'>无大额医疗</option>
           <option value='general'>一般医疗 (每5年20万)</option>
@@ -110,7 +110,7 @@
           <div class='text-xs text-gray-500 mt-1'>购买力 <span id='totalExpenseReal'>--</span></div>
         </div>
       </div>
-      <div class='text-xs text-gray-500 mt-2'>养老金覆盖率 = 退休期养老金总收入 ÷ 累计支出，反映社保养老金能覆盖多少比例开销；账面含通胀，购买力为折回当前的金额。</div>
+      <div class='text-xs text-gray-500 mt-2'>计价口径：<b>生活水平</b>按家庭（两人）计、丧偶期按系数下调；<b>护理与医疗（含大额）</b>按每人计、在世人数叠加。养老金覆盖率 = 退休期养老金总收入 ÷ 累计支出。账面含通胀，购买力为折回当前的金额。</div>
       <div>
         <div id='lifestyleChart' class='w-full h-[260px] rounded-xl overflow-hidden'></div>
         <div class='text-xs text-gray-500 mt-1'>家庭消耗期：曲线=账户余额（左轴），柱=当年支出（右轴，紫色为丧偶期）。阴影段为丧偶期，虚线为较晚去世者。</div>
