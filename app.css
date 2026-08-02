@@ -25,28 +25,28 @@ input[type='range'] {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 8px;
-  border-radius: 4px;
-  background: linear-gradient(90deg, #e2e8f0 0%, #e2e8f0 var(--p,50%), #3f3f46 var(--p,50%), #3f3f46 100%);
+  height: 5px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #71717a 0%, #71717a var(--p,50%), #3f3f46 var(--p,50%), #3f3f46 100%);
   outline: none;
   cursor: pointer;
 }
 input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
-  background: #fff;
+  background: #e4e4e7;
   cursor: pointer;
-  border: 3px solid #94a3b8;
-  box-shadow: 0 2px 8px rgba(148,163,184,0.5);
+  border: 2px solid #a1a1aa;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
   transition: transform 0.1s ease;
 }
 input[type='range']::-webkit-slider-thumb:hover { transform: scale(1.15); }
 input[type='range']::-moz-range-thumb {
-  width: 18px; height: 18px; border-radius: 50%;
-  background: #fff; border: 3px solid #94a3b8; cursor: pointer;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #e4e4e7; border: 2px solid #a1a1aa; cursor: pointer;
 }
 input[type='number'] {
   background: #2a2a2e;
