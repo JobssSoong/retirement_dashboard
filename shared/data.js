@@ -73,6 +73,7 @@ const assetParams = {
 const assetNames = Object.keys(assetParams);
 
 const defaultState = {
+  mode: 'single',              // 'single' | 'couple'  夫妻共同规划
   startAge: 35,
   targetAge: 65,
   currentAge: 35,
@@ -90,5 +91,14 @@ const defaultState = {
   pensionMonthly: 3000,        // 月养老金（元）
   insuranceRate: 0.8,          // 医保报销比例
   medicalInflation: 0.03,      // 医疗通胀率
-  lifeExpectancy: 80           // 预期寿命（岁）
+  lifeExpectancy: 80,          // 预期寿命（岁）
+  // 夫妻模式：配偶参数 + 丧偶期支出系数
+  spouse: {
+    currentAge: 33,
+    targetAge: 60,              // 配偶退休年龄
+    lifeExpectancy: 82,         // 配偶预期寿命
+    pensionType: 'employee',
+    pensionMonthly: 2500
+  },
+  survivorFactor: 0.65         // 丧偶后家庭生活支出占两人期的比例
 };

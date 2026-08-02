@@ -63,10 +63,12 @@ function retirementNetFlows(s) {
   return flows;
 }
 
-// 所需养老储蓄额 C：使资金（按收益率复利）恰好支撑退休净现金流至预期寿命
-// 原理：终值线性 → C = -F_T / (1+r)^T，F_T 为初始本金 0 时累积到预期寿命的终值（负）
+// 所需养老储蓄额 C（单人）：使资金恰好支撑退休净现金流至预期寿命
 function requiredRetirementCorpus(s) {
   s = s || state;
+  return s.mode === 'couple' ? coupleCorpus(s) : singleCorpus(s);
+}
+function singleCorpus(s) {
   const r = s.returnRate;
   const flows = retirementNetFlows(s);
   let bal = 0;
@@ -77,24 +79,30 @@ function requiredRetirementCorpus(s) {
   return { nominal: C, real: n > 0 ? C / Math.pow(1 + s.inflation, n) : C, flows, T };
 }
 
-// 每月需存：在距退休 n 年内、已有 currentSavings、收益率 r 下，攒到目标 C 每月需存多少
-// 用与「累积路径」一致的口径线性反解，保证增长曲线恰好落到 C
+// 每月需存（单人）：线性反解
 function requiredMonthlyDeposit(s, C) {
   s = s || state;
+  return s.mode === 'couple' ? coupleSolve(s).deposit : singleMonthlyDeposit(s, C);
+}
+function singleMonthlyDeposit(s, C) {
   const n = yearsToRetire(s);
   if (n <= 0) return {realAnnual:0, realMonthly:0, nominalFirst:0, nominalLast:0};
   const at = path => { const p = path.find(d => d.age === s.targetAge) || path[path.length - 1]; return p ? p.nominal : 0; };
   const B0 = at(calculateRetirementPath(s.startAge, s.targetAge, 0, s.currentSavings, s.returnRate, s.inflation));
   const B1 = at(calculateRetirementPath(s.startAge, s.targetAge, 1, s.currentSavings, s.returnRate, s.inflation));
   const slope = B1 - B0;
-  const A = slope <= 0 ? 0 : Math.max(0, (C - B0) / slope);   // 实际（购买力恒定）年存
+  const A = slope <= 0 ? 0 : Math.max(0, (C - B0) / slope);
   const D = A / 12;
   const g = 1 + s.inflation;
   return { realAnnual: A, realMonthly: D, nominalFirst: D, nominalLast: D * Math.pow(g, n - 1) };
 }
 
-// 退休支取模拟：从给定初始本金按净现金流推演（默认用所需储蓄额，即恰好支撑至预期寿命）
+// 退休支取模拟（单人）
 function simulateRetirementCashflow(s, initialCapital) {
+  s = s || state;
+  return s.mode === 'couple' ? coupleSim(s) : singleSim(s, initialCapital);
+}
+function singleSim(s, initialCapital) {
   s = s || state;
   const C = initialCapital !== undefined ? initialCapital : requiredRetirementCorpus(s).nominal;
   const r = s.returnRate;
@@ -107,6 +115,83 @@ function simulateRetirementCashflow(s, initialCapital) {
     if (bal <= 0) return {depletionAge: f.age, survives: false, finalBalance: bal, detail};
   }
   return {depletionAge: s.lifeExpectancy, survives: bal >= 0, finalBalance: bal, detail};
+}
+
+// ============ 夫妻共同规划（独立时间线）============
+// 两人各自有退休/去世年份；家庭作为一个经济单元：共同储蓄(到较晚退休)、共同支取(到较晚去世)。
+// 丧偶期：仅一人在世时，家庭生活支出按 survivorFactor 下调；医疗/护理按在世者本人算。
+function couplePersons(s) {
+  return [
+    {age: s.currentAge, retire: s.targetAge, death: s.lifeExpectancy, pension: s.pensionMonthly},
+    {age: s.spouse.currentAge, retire: s.spouse.targetAge, death: s.spouse.lifeExpectancy, pension: s.spouse.pensionMonthly}
+  ];
+}
+function coupleSolve(s) {
+  s = s || state;
+  const [A, B] = couplePersons(s);
+  const eA = {retire: A.retire - A.age, death: A.death - A.age};
+  const eB = {retire: B.retire - B.age, death: B.death - B.age};
+  const H = Math.max(eA.death, eB.death);
+  const R_first = Math.min(eA.retire, eB.retire);
+  const R_last = Math.max(eA.retire, eB.retire);
+  const r = s.returnRate, infl = s.inflation, medInfl = s.medicalInflation, ins = s.insuranceRate;
+  const lifeH = lifestyleOptions[s.lifestyle], careM = careOptions[s.careType], medical = medicalOptions[s.medicalScenario], surv = s.survivorFactor;
+
+  function run(D) {
+    let bal = s.currentSavings;
+    const traj = [];
+    for (let y = 0; y < H; y++) {
+      const aAge = A.age + y, bAge = B.age + y;
+      const aAlive = y < eA.death, bAlive = y < eB.death;
+      const aRet = aAlive && y >= eA.retire, bRet = bAlive && y >= eB.retire;
+      const numAlive = (aAlive ? 1 : 0) + (bAlive ? 1 : 0);
+      // 养老金收入（各自退休且在世）
+      let income = 0;
+      if (aRet) income += (A.pension * 12 / 1e4) * Math.pow(1 + infl, y);
+      if (bRet) income += (B.pension * 12 / 1e4) * Math.pow(1 + infl, y);
+      // 共同储蓄（直到较晚退休）
+      const deposit = y < R_last ? 12 * D * Math.pow(1 + infl, y) : 0;
+      // 家庭生活支出（进入退休期后；丧偶期按系数下调）
+      let living = 0;
+      if (y >= R_first && numAlive > 0) {
+        const survMul = numAlive === 2 ? 1 : surv;
+        const older = Math.max(aAlive ? aAge : 0, bAlive ? bAge : 0);
+        living = lifeH * survMul * phaseOfAge(older).baseMul * Math.pow(1 + infl, y);
+      }
+      // 医疗/护理按在世者本人叠加
+      let med = 0, care = 0;
+      [[aAlive, aAge], [bAlive, bAge]].forEach(([al, ag]) => {
+        if (!al) return;
+        const ph = phaseOfAge(ag);
+        med += ph.medical * Math.pow(1 + medInfl, y) * (1 - ins);
+        if (ph.care && careM) care += careM * 12 * Math.pow(1 + medInfl, y);
+      });
+      let extra = 0;
+      if (y >= R_first && medical.freq > 0 && y > 0 && y % medical.freq === 0) extra = medical.base * Math.pow(1 + medInfl, y) * (1 - ins);
+      const outflow = living + med + care + extra;
+      bal = bal * (1 + r) + deposit + income - outflow;
+      traj.push({y, aAge, bAge, aAlive, bAlive, numAlive, deposit, income, living, medical: med + extra, care, outflow, endBalance: bal});
+    }
+    return {traj, final: bal};
+  }
+  if (H <= 0) return {D: 0, peakC: s.currentSavings, peakCreal: s.currentSavings, traj: [], H: 0, R_first: 0, R_last: 0, n: 0, deposit: {realAnnual:0, realMonthly:0, nominalFirst:0, nominalLast:0}};
+  const f0 = run(0).final, f1 = run(1).final;
+  const D = Math.abs(f1 - f0) < 1e-9 ? 0 : Math.max(0, -f0 / (f1 - f0));
+  const traj = run(D).traj;
+  let peak = s.currentSavings, peakYear = 0;
+  traj.forEach(t => { if (t.endBalance > peak) { peak = t.endBalance; peakYear = t.y; } });
+  const n = R_last, g = 1 + infl;
+  return {D, peakC: peak, peakCreal: peak / Math.pow(1 + infl, peakYear), traj, H, R_first, R_last, n,
+    deposit: {realAnnual: D * 12, realMonthly: D, nominalFirst: D, nominalLast: n > 0 ? D * Math.pow(g, n - 1) : D}};
+}
+function coupleCorpus(s) {
+  const j = coupleSolve(s);
+  return {nominal: j.peakC, real: j.peakCreal};
+}
+function coupleSim(s) {
+  const j = coupleSolve(s);
+  const last = j.traj[j.traj.length - 1];
+  return {detail: j.traj.filter(t => t.y >= j.R_first), full: j.traj, survives: last ? last.endBalance >= -1e-6 : true, finalBalance: last ? last.endBalance : 0, R_first: j.R_first, H: j.H};
 }
 
 function getPopulation(year) {

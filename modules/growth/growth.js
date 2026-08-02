@@ -15,6 +15,28 @@ Dashboard.register('growth', (() => {
   };
   let chart;
 
+  function renderGrowthCouple(s, chart) {
+    const j = coupleSolve(s);
+    const acc = j.traj.filter(t => t.y <= j.R_last);
+    const ages = acc.map(t => (s.currentAge + t.y) + '岁');
+    const balances = acc.map(t => +t.endBalance.toFixed(2));
+    chart.setOption({
+      tooltip: {trigger: 'axis', formatter: p => p[0].name + '<br/>家庭账户余额: ' + fmtWan(p[0].value)},
+      grid: {left: '3%', right: '4%', bottom: '3%', top: '10%', containLabel: true},
+      xAxis: {type: 'category', boundaryGap: false, data: ages, axisLabel: {interval: 4}},
+      yAxis: {type: 'value', name: '余额(万元·账面)', axisLabel: {formatter: v => fmtNum(v, 0)}},
+      series: [{
+        name: '家庭账户余额', type: 'line', smooth: true, symbol: 'none', data: balances,
+        lineStyle: {color: '#e94560', width: 3}, itemStyle: {color: '#e94560'}, areaStyle: {color: 'rgba(233,69,96,0.15)'},
+        markLine: {silent: true, symbol: 'none', data: [
+          {xAxis: (s.currentAge + j.R_first) + '岁', lineStyle: {color: '#60a5fa', type: 'dashed'}, label: {formatter: '首人退休', color: '#60a5fa'}},
+          {xAxis: (s.currentAge + j.R_last) + '岁', lineStyle: {color: '#fbbf24', type: 'dashed'}, label: {formatter: '两人均退休', color: '#fbbf24'}},
+          {yAxis: j.peakC, lineStyle: {color: '#34d399', type: 'dashed'}, label: {formatter: '所需储蓄 ' + fmtNum(j.peakC, 0) + '万', color: '#34d399'}}
+        ]}
+      }]
+    }, true);
+  }
+
   function setValue(key, v) {
     const c = controls.find(x => x.key === key);
     v = Math.max(c.min, Math.min(c.max, v));
@@ -65,6 +87,8 @@ Dashboard.register('growth', (() => {
       const C = requiredRetirementCorpus(s);
       const dep = requiredMonthlyDeposit(s, C.nominal);
       root.querySelector('#growthDepositReadout').textContent = Math.round(dep.realMonthly * 10000).toLocaleString('zh-CN') + ' 元/月（购买力恒定）';
+
+      if (s.mode === 'couple') { renderGrowthCouple(s, chart); return; }
 
       // 累积路径用反解出的年存额 A，使曲线恰好落到 C
       const A = dep.realAnnual;
