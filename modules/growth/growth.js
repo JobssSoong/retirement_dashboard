@@ -13,22 +13,11 @@ Dashboard.register('growth', (() => {
   const presets = {conservative:{returnRate:0.02,inflation:0.03}, balanced:{returnRate:0.04,inflation:0.025}, aggressive:{returnRate:0.06,inflation:0.025}};
   const pensionPresets = {none:0, resident:220, employee:3000, civil:5500};
   const spousePresets = {none:0, resident:220, employee:2500, civil:5500};
-  // 滑块用的有序选项（key 对应 calc 里的 map，label/sub 用于显示）
-  const lifestyleChoices = [
-    {key:'basic', label:'基础生活', sub:'6万/年'}, {key:'normal', label:'普通生活', sub:'12万/年'},
-    {key:'comfortable', label:'舒适养老', sub:'20万/年'}, {key:'premium', label:'品质养老', sub:'35万/年'},
-    {key:'luxury', label:'奢侈养老', sub:'60万/年'}
-  ];
-  const careChoices = [
-    {key:'self', label:'居家自理', sub:'0'}, {key:'daycare', label:'社区日托', sub:'4千/月'},
-    {key:'homehelp', label:'居家护工', sub:'6千/月'}, {key:'normal', label:'普通养老院', sub:'8千/月'},
-    {key:'mid', label:'中高端社区', sub:'2万/月'}, {key:'high', label:'高端护理院', sub:'3万/月'}
-  ];
-  const medicalChoices = [
-    {key:'none', label:'无', sub:'0'}, {key:'low', label:'低', sub:'1万/年'},
-    {key:'mid', label:'中', sub:'3万/年'}, {key:'high', label:'高', sub:'5万/年'},
-    {key:'severe', label:'重', sub:'8万/年'}
-  ];
+  // 连续值按区间判定档次标签（max 为该档上限）
+  const lifestyleTiers = [{max:9,label:'基础生存'},{max:16,label:'普通生活'},{max:27.5,label:'舒适养老'},{max:47.5,label:'品质养老'},{max:1e9,label:'奢侈养老'}];
+  const careTiers = [{max:0.2,label:'居家自理'},{max:0.5,label:'社区日托'},{max:0.7,label:'居家护工'},{max:1.4,label:'普通养老院'},{max:2.5,label:'中高端社区'},{max:1e9,label:'高端护理院'}];
+  const medicalTiers = [{max:0.5,label:'无'},{max:2,label:'低'},{max:4,label:'中'},{max:6.5,label:'高'},{max:1e9,label:'重'}];
+  const tierLabel = (tiers, v) => { const t = tiers.find(x => v <= x.max); return t ? t.label : '—'; };
 
   function setValue(c, val) {
     const obj = c.group ? state[c.group] : state;
@@ -137,19 +126,19 @@ Dashboard.register('growth', (() => {
     const medFA = Math.pow(1 + s.medicalInflation, nA);
     const retireAYear = cy + nA, retireBYear = cy + nB;
     document.getElementById('lifestyleRetireYear').textContent = retireAYear;
-    document.getElementById('lifestyleRetireNominal').textContent = fmtWan(lifestyleOptions[s.lifestyle] * inflF);
+    document.getElementById('lifestyleRetireNominal').textContent = fmtWan(s.lifestyle * inflF);
     document.getElementById('pensionRetireYear').textContent = retireAYear;
     document.getElementById('pensionRetireNominal').textContent = Math.round(s.pensionMonthly * inflF).toLocaleString('zh-CN') + ' 元';
     document.getElementById('spousePensionRetireYear').textContent = retireBYear;
     document.getElementById('spousePensionRetireNominal').textContent = Math.round(s.spouse.pensionMonthly * Math.pow(1 + s.inflation, nB)).toLocaleString('zh-CN') + ' 元';
     document.getElementById('medicalRetireYear').textContent = retireAYear;
-    const crit = medicalOptions[s.medicalScenario];
+    const crit = s.medical;
     document.getElementById('medicalRetireNominal').textContent = crit > 0 ? fmtWan(crit * medFA) : '—';
     // 护理：按较年长者进入护理期(≈83岁)那年算
     const olderAge = Math.max(s.currentAge, s.spouse.currentAge);
     const yearsToCare = Math.max(0, 83 - olderAge);
     document.getElementById('careRetireYear').textContent = cy + yearsToCare;
-    document.getElementById('careRetireNominal').textContent = fmtWan(careOptions[s.careType] * Math.pow(1 + s.medicalInflation, yearsToCare));
+    document.getElementById('careRetireNominal').textContent = fmtWan(s.care * Math.pow(1 + s.medicalInflation, yearsToCare));
   }
 
   return {
@@ -175,15 +164,15 @@ Dashboard.register('growth', (() => {
       spouseLifeSlider.addEventListener('input', () => { state.spouse.lifeExpectancy = Math.max(state.spouse.targetAge + 5, parseInt(spouseLifeSlider.value)); Store.changed(); });
 
       const bindSel = (id, fn) => root.querySelector('#' + id).addEventListener('change', e => fn(e.target.value));
-      // 生活/护理/重大医疗 改为滑块
-      const bindChoiceSlider = (id, choices, key) => {
+      // 生活/护理/重大医疗：连续滑块（金额），无吸附
+      const bindCont = (id, min, max, step, key) => {
         const sl = root.querySelector('#' + id);
-        sl.min = 0; sl.max = choices.length - 1; sl.step = 1;
-        sl.addEventListener('input', () => { state[key] = choices[parseInt(sl.value)].key; Store.changed(); });
+        sl.min = min; sl.max = max; sl.step = step;
+        sl.addEventListener('input', () => { state[key] = parseFloat(sl.value); Store.changed(); });
       };
-      bindChoiceSlider('lifestyleSlider', lifestyleChoices, 'lifestyle');
-      bindChoiceSlider('careSlider', careChoices, 'careType');
-      bindChoiceSlider('medicalSlider', medicalChoices, 'medicalScenario');
+      bindCont('lifestyleSlider', 2, 80, 0.5, 'lifestyle');
+      bindCont('careSlider', 0, 5, 0.1, 'care');
+      bindCont('medicalSlider', 0, 12, 0.5, 'medical');
       bindSel('pensionTypeSelect', v => { state.pensionType = v; state.pensionMonthly = pensionPresets[v]; Store.changed(); });
       root.querySelector('#pensionInput').addEventListener('change', e => { state.pensionMonthly = Math.max(0, parseFloat(e.target.value) || 0); Store.changed(); });
       bindSel('spousePensionSelect', v => { state.spouse.pensionType = v; state.spouse.pensionMonthly = spousePresets[v]; Store.changed(); });
@@ -215,16 +204,15 @@ Dashboard.register('growth', (() => {
       root.querySelector('#phaseMulActive').value = s.phaseMul.active;
       root.querySelector('#phaseMulDecline').value = s.phaseMul.decline;
       root.querySelector('#phaseMulCare').value = s.phaseMul.care;
-      // 生活/护理/重大医疗 滑块同步 + 当前档位标签
-      const syncChoice = (id, choices, key, labelId) => {
-        const idx = Math.max(0, choices.findIndex(c => c.key === s[key]));
-        const sl = root.querySelector('#' + id); if (sl) sl.value = idx;
-        const c = choices[idx];
-        const lab = root.querySelector('#' + labelId); if (lab) lab.textContent = c.label + ' (' + c.sub + ')';
+      // 生活/护理/重大医疗 连续滑块同步 + 按值判定档位标签
+      const syncCont = (id, key, labelId, tiers, unit) => {
+        const sl = root.querySelector('#' + id); if (sl) sl.value = s[key];
+        const lab = root.querySelector('#' + labelId);
+        if (lab) lab.textContent = tierLabel(tiers, s[key]) + '（' + fmtNum(s[key], 1) + unit + '）';
       };
-      syncChoice('lifestyleSlider', lifestyleChoices, 'lifestyle', 'lifestyleLabel');
-      syncChoice('careSlider', careChoices, 'careType', 'careLabel');
-      syncChoice('medicalSlider', medicalChoices, 'medicalScenario', 'medicalLabel');
+      syncCont('lifestyleSlider', 'lifestyle', 'lifestyleLabel', lifestyleTiers, '万/年');
+      syncCont('careSlider', 'care', 'careLabel', careTiers, '万/月');
+      syncCont('medicalSlider', 'medical', 'medicalLabel', medicalTiers, '万/年');
       // 其余下拉
       const sels = ['pensionTypeSelect','spousePensionSelect','insuranceSelect','medicalInflationSelect'];
       const vals = [s.pensionType, s.spouse.pensionType, s.insuranceRate, s.medicalInflation];

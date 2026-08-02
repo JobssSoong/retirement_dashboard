@@ -45,9 +45,9 @@ function phaseBaseMul(s, ph) {
 // 退休期逐年「净现金流」（不含初始本金）：收入=养老金，支出=生活+医疗自付+护理
 function retirementNetFlows(s) {
   s = s || state;
-  const lifestyleAnnual = lifestyleOptions[s.lifestyle];
-  const careMonthly = careOptions[s.careType];
-  const medical = medicalOptions[s.medicalScenario];
+  const lifestyleAnnual = s.lifestyle;
+  const careMonthly = s.care;
+  const medical = s.medical;
   const insRate = s.insuranceRate;
   const medInfl = s.medicalInflation;
   const infl = s.inflation;
@@ -137,7 +137,7 @@ function coupleSolve(s) {
   const R_first = Math.min(eA.retire, eB.retire);
   const R_last = Math.max(eA.retire, eB.retire);
   const r = s.returnRate, infl = s.inflation, medInfl = s.medicalInflation, ins = s.insuranceRate;
-  const lifeH = lifestyleOptions[s.lifestyle], careM = careOptions[s.careType], medical = medicalOptions[s.medicalScenario], surv = s.survivorFactor;
+  const lifeH = s.lifestyle, careM = s.care, medical = s.medical, surv = s.survivorFactor;
 
   function run(D) {
     let bal = s.currentSavings;

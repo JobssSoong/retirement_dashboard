@@ -1,6 +1,6 @@
 // 数据常量层：权威真实数据 + 默认状态（各模块共享）
 // 人口：UN World Population Prospects 2024（中方案）；储蓄率：World Bank；宏观：国家统计局 / 人民银行
-const STORAGE_KEY = 'retirementDashboardState_v2';
+const STORAGE_KEY = 'retirementDashboardState_v3';
 
 // 21 档 5 岁组（与 UN WPP 标准一致）
 const ageGroups = ['0-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80-84','85-89','90-94','95-99','100+'];
@@ -128,11 +128,7 @@ const housePriceData = [
   {year:2070,price:8400,baiCity:13200,forecast:true},{year:2080,price:8300,baiCity:13000,forecast:true},{year:2090,price:8200,baiCity:12800,forecast:true}
 ];
 
-const lifestyleOptions = {basic:6,normal:12,comfortable:20,premium:35,luxury:60};
-// 护理费（每人·月，当前购买力）。来源：民政部/市场调研区间（无全国官方中位数）
-const careOptions = {self:0, homehelp:0.6, daycare:0.4, normal:0.8, mid:2.0, high:3.0};
-// 重大/长期医疗（每人·年，万元，当前购买力，按有效自付率计入）。来源：重疾行业读本
-const medicalOptions = {none:0, low:1, mid:3, high:5, severe:8};
+// 生活/护理/重大医疗 现以连续金额(当前购买力)存于 state，档位标签由 growth.js 按区间判定
 
 const assetParams = {
   '银行定存': {rate:0.015,vol:0,dd:0,liq:0,beh:0,color:'#95a5a6'},
@@ -153,9 +149,9 @@ const defaultState = {
   inflation: 0.025,
   returnRate: 0.03,
   currentSavings: 0,            // 已攒储蓄（万元）—— 唯一的"已有资产"输入
-  lifestyle: 'comfortable',
-  careType: 'home',
-  medicalScenario: 'none',
+  lifestyle: 20,            // 家庭生活支出（万/年，当前购买力）
+  care: 0.6,                // 护理费（万/人·月，当前购买力）
+  medical: 0,               // 重大医疗（万/人·年，当前购买力）
   behaviorPremium: 1,
   assetWeights: {'银行定存':15,'国债':15,'纯债基金':15,'固收+理财':15,'年金保险':10,'增额终身寿':10,'红利指数':20},
   pyramidYear: 2020,
