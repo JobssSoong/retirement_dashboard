@@ -31,19 +31,32 @@ Dashboard.register('growth', (() => {
 
   function renderChart(s, j) {
     const cy = new Date().getFullYear();
-    const acc = j.traj.filter(t => t.y <= j.R_last);
+    const acc = j.traj;                       // 完整终身轨迹：攒钱 → 花钱，到最后一人去世
     const years = acc.map(t => String(cy + t.y));
     const balances = acc.map(t => +t.endBalance.toFixed(2));
     const retireAYear = cy + (s.targetAge - s.currentAge);
     const retireBYear = cy + (s.spouse.targetAge - s.spouse.currentAge);
+    const lastYear = years[years.length - 1];
+    const lastLife = Math.max(s.lifeExpectancy, s.spouse.lifeExpectancy);
     const ageAt = (baseAge, y) => baseAge + y;
+    // 丧偶期区段（仅一人在世）
+    const survAreas = [];
+    let st = null;
+    acc.forEach((t, i) => {
+      const alone = t.numAlive === 1;
+      if (alone && st === null) st = years[i];
+      if ((!alone || i === acc.length - 1) && st !== null) {
+        survAreas.push([{xAxis: st, itemStyle: {color: 'rgba(167,139,250,0.10)'}}, {xAxis: alone ? years[i] : years[i - 1]}]);
+        st = null;
+      }
+    });
     chart.setOption({
       tooltip: {trigger: 'axis', formatter: function(p) {
         const y = parseInt(p[0].name) - cy;
         return p[0].name + ' 年<br/>家庭账户余额: ' + fmtWan(p[0].value) + '<br/>本人 ' + ageAt(s.currentAge, y) + ' 岁 · 配偶 ' + ageAt(s.spouse.currentAge, y) + ' 岁';
       }},
       grid: {left: '3%', right: '4%', bottom: '3%', top: '10%', containLabel: true},
-      xAxis: {type: 'category', boundaryGap: false, data: years, name: '年份', nameLocation: 'middle', nameGap: 28, axisLabel: {interval: 3}},
+      xAxis: {type: 'category', boundaryGap: false, data: years, name: '年份', nameLocation: 'middle', nameGap: 28, axisLabel: {interval: 4}},
       yAxis: {type: 'value', name: '余额(万元·账面)', axisLabel: {formatter: v => fmtNum(v, 0)}},
       series: [{
         name: '家庭账户余额', type: 'line', smooth: true, symbol: 'none', data: balances,
@@ -51,8 +64,10 @@ Dashboard.register('growth', (() => {
         markLine: {silent: true, symbol: 'none', data: [
           {xAxis: String(retireAYear), lineStyle: {color: '#60a5fa', type: 'dashed'}, label: {formatter: '本人退休 ' + s.targetAge + '岁', color: '#60a5fa'}},
           {xAxis: String(retireBYear), lineStyle: {color: '#f472b6', type: 'dashed'}, label: {formatter: '配偶退休 ' + s.spouse.targetAge + '岁', color: '#f472b6'}},
+          {xAxis: lastYear, lineStyle: {color: '#94a3b8', type: 'dotted'}, label: {formatter: '较晚去世 ' + lastLife + '岁', color: '#94a3b8'}},
           {yAxis: j.peakC, lineStyle: {color: '#34d399', type: 'dashed'}, label: {formatter: '所需储蓄 ' + fmtNum(j.peakC, 0) + '万', color: '#34d399'}}
-        ]}
+        ]},
+        markArea: {silent: true, label: {color: '#a78bfa', fontSize: 10, formatter: '丧偶期'}, data: survAreas}
       }]
     }, true);
   }
