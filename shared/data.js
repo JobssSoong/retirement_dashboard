@@ -1,6 +1,6 @@
 // 数据常量层：权威真实数据 + 默认状态（各模块共享）
 // 人口：UN World Population Prospects 2024（中方案）；储蓄率：World Bank；宏观：国家统计局 / 人民银行
-const STORAGE_KEY = 'retirementDashboardState_v1';
+const STORAGE_KEY = 'retirementDashboardState_v2';
 
 // 21 档 5 岁组（与 UN WPP 标准一致）
 const ageGroups = ['0-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80-84','85-89','90-94','95-99','100+'];
@@ -73,7 +73,7 @@ const assetParams = {
 const assetNames = Object.keys(assetParams);
 
 const defaultState = {
-  mode: 'single',              // 'single' | 'couple'  夫妻共同规划
+  mode: 'couple',              // 始终夫妻共同规划
   startAge: 35,
   targetAge: 65,
   currentAge: 35,

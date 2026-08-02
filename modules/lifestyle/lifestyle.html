@@ -62,8 +62,34 @@
         </select>
       </div>
       <div>
-        <div class='flex justify-between text-sm mb-1'><span class='text-gray-300'>预期寿命</span><span class='text-[#e94560] font-mono' id='lifeExpectancyValue'>--</span></div>
+        <div class='flex justify-between text-sm mb-1'><span class='text-gray-300'>本人预期寿命</span><span class='text-[#e94560] font-mono' id='lifeExpectancyValue'>--</span></div>
         <input id='lifeExpectancySlider' type='range' class='w-full'>
+      </div>
+      <div class='border-t border-gray-700/40 pt-4 space-y-4'>
+        <div class='text-xs text-gray-400 font-medium'>配偶</div>
+        <div>
+          <label class='block text-sm text-gray-300 mb-1'>配偶养老金</label>
+          <select id='spousePensionSelect'>
+            <option value='none'>无养老金</option>
+            <option value='resident'>城乡居民（约 220 元）</option>
+            <option value='employee'>企业职工（约 2500 元）</option>
+            <option value='civil'>机关事业（约 5500 元）</option>
+          </select>
+          <div class='flex items-center gap-2 mt-2'>
+            <span class='text-xs text-gray-400'>月养老金</span>
+            <input id='spousePensionInput' type='number' min='0' max='30000' step='100' class='w-28 text-sm'>
+            <span class='text-xs text-gray-500'>元/月</span>
+          </div>
+        </div>
+        <div>
+          <div class='flex justify-between text-sm mb-1'><span class='text-gray-300'>配偶预期寿命</span><span class='text-[#e94560] font-mono' id='spouseLifeValue'>--</span></div>
+          <input id='spouseLifeSlider' type='range' class='w-full'>
+        </div>
+      </div>
+      <div>
+        <div class='flex justify-between text-sm mb-1'><span class='text-gray-300'>丧偶期支出比例</span><span class='text-[#e94560] font-mono' id='survivorValue'>--</span></div>
+        <input id='survivorSlider' type='range' min='40' max='100' step='5' class='w-full'>
+        <div class='text-xs text-gray-500 mt-1'>仅一人在世时，家庭生活支出占两人期的比例</div>
       </div>
     </div>
     <div class='lg:col-span-2 space-y-4'>
@@ -87,7 +113,7 @@
       <div class='text-xs text-gray-500 mt-2'>养老金覆盖率 = 退休期养老金总收入 ÷ 累计支出，反映社保养老金能覆盖多少比例开销；账面含通胀，购买力为折回当前的金额。</div>
       <div>
         <div id='lifestyleChart' class='w-full h-[260px] rounded-xl overflow-hidden'></div>
-        <div class='text-xs text-gray-500 mt-1'>退休消耗期：曲线=账户余额（左轴，按所需储蓄额支取至预期寿命归零），柱=当年支出（右轴）。虚线为预期寿命。</div>
+        <div class='text-xs text-gray-500 mt-1'>家庭消耗期：曲线=账户余额（左轴），柱=当年支出（右轴，紫色为丧偶期）。阴影段为丧偶期，虚线为较晚去世者。</div>
       </div>
       <div>
         <div id='lifestyleBreakdown' class='w-full h-[200px] rounded-xl overflow-hidden'></div>

@@ -7,17 +7,29 @@
         <button data-preset='balanced' class='preset-btn px-3 py-1.5 rounded bg-[#16213e] hover:bg-[#1e2d4d] text-xs text-gray-300 border border-gray-700 transition'>平衡</button>
         <button data-preset='aggressive' class='preset-btn px-3 py-1.5 rounded bg-[#16213e] hover:bg-[#1e2d4d] text-xs text-gray-300 border border-gray-700 transition'>进取</button>
       </div>
-      <div>
-        <div class='flex justify-between text-sm mb-1'><span class='text-gray-300'>起始年龄</span><span class='text-[#e94560] font-mono' id='startAgeValue'>--</span></div>
-        <div class='flex items-center gap-3'><input id='startAgeSlider' type='range' class='flex-1'><input id='startAgeInput' type='number' class='w-20 text-sm'></div>
-      </div>
-      <div>
-        <div class='flex justify-between text-sm mb-1'><span class='text-gray-300'>目标退休年龄</span><span class='text-[#e94560] font-mono' id='targetAgeValue'>--</span></div>
-        <div class='flex items-center gap-3'><input id='targetAgeSlider' type='range' class='flex-1'><input id='targetAgeInput' type='number' class='w-20 text-sm'></div>
-      </div>
-      <div>
-        <div class='flex justify-between text-sm mb-1'><span class='text-gray-300'>当前年龄</span><span class='text-[#e94560] font-mono' id='currentAgeValue'>--</span></div>
-        <div class='flex items-center gap-3'><input id='currentAgeSlider' type='range' class='flex-1'><input id='currentAgeInput' type='number' class='w-20 text-sm'></div>
+      <div class='grid grid-cols-2 gap-4'>
+        <div class='space-y-3'>
+          <div class='text-xs text-gray-400 font-medium'>本人</div>
+          <div>
+            <div class='flex justify-between text-xs mb-1'><span class='text-gray-300'>当前年龄</span><span class='text-[#e94560] font-mono' id='currentAgeValue'>--</span></div>
+            <div class='flex items-center gap-2'><input id='currentAgeSlider' type='range' class='flex-1'><input id='currentAgeInput' type='number' class='w-16 text-sm'></div>
+          </div>
+          <div>
+            <div class='flex justify-between text-xs mb-1'><span class='text-gray-300'>退休年龄</span><span class='text-[#e94560] font-mono' id='targetAgeValue'>--</span></div>
+            <div class='flex items-center gap-2'><input id='targetAgeSlider' type='range' class='flex-1'><input id='targetAgeInput' type='number' class='w-16 text-sm'></div>
+          </div>
+        </div>
+        <div class='space-y-3'>
+          <div class='text-xs text-gray-400 font-medium'>配偶</div>
+          <div>
+            <div class='flex justify-between text-xs mb-1'><span class='text-gray-300'>当前年龄</span><span class='text-[#e94560] font-mono' id='spouseAgeValue'>--</span></div>
+            <div class='flex items-center gap-2'><input id='spouseAgeSlider' type='range' class='flex-1'><input id='spouseAgeInput' type='number' class='w-16 text-sm'></div>
+          </div>
+          <div>
+            <div class='flex justify-between text-xs mb-1'><span class='text-gray-300'>退休年龄</span><span class='text-[#e94560] font-mono' id='spouseRetireValue'>--</span></div>
+            <div class='flex items-center gap-2'><input id='spouseRetireSlider' type='range' class='flex-1'><input id='spouseRetireInput' type='number' class='w-16 text-sm'></div>
+          </div>
+        </div>
       </div>
       <div>
         <div class='flex justify-between text-sm mb-1'><span class='text-gray-300'>年通胀率</span><span class='text-[#e94560] font-mono' id='inflationValue'>--</span></div>
@@ -34,13 +46,13 @@
     </div>
     <div class='lg:col-span-2'>
       <div class='bg-[#16213e]/60 rounded-lg p-3 mb-3 flex items-center justify-between border border-gray-700/40'>
-        <span class='text-sm text-gray-300'>为此需每月存入</span>
+        <span class='text-sm text-gray-300'>为此家庭需每月存入</span>
         <span id='growthDepositReadout' class='text-[#e94560] font-bold text-lg kpi-number'>--</span>
       </div>
       <div id='growthChart' class='w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden'></div>
-      <div class='text-xs text-gray-500 mt-2'>累积期账户余额增长（账面）：当前已存 + 每月按计划存入，退休时恰好达到所需储蓄额（虚线）。</div>
+      <div class='text-xs text-gray-500 mt-2'>家庭账户累积增长（账面）：当前已存 + 每月按计划存入，两人均退休时达到所需储蓄额峰值（绿线）。</div>
       <div class='formula'>
-        <span class="var">逐年余额</span> $B_t=B_{t-1}(1+r)+D_t$，$D_t=D\,(1+\pi)^t$ 为当年存入；保守/乐观为 $r\mp1\%$
+        <span class="var">逐年余额</span> $B_t=B_{t-1}(1+r)+D_t$，$D_t=D\,(1+\pi)^t$；存款持续到较晚退休者，之后进入支取期
       </div>
     </div>
   </div>
