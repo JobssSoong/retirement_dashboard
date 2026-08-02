@@ -30,20 +30,27 @@ Dashboard.register('growth', (() => {
   }
 
   function renderChart(s, j) {
+    const cy = new Date().getFullYear();
     const acc = j.traj.filter(t => t.y <= j.R_last);
-    const ages = acc.map(t => (s.currentAge + t.y) + '岁');
+    const years = acc.map(t => String(cy + t.y));
     const balances = acc.map(t => +t.endBalance.toFixed(2));
+    const retireAYear = cy + (s.targetAge - s.currentAge);
+    const retireBYear = cy + (s.spouse.targetAge - s.spouse.currentAge);
+    const ageAt = (baseAge, y) => baseAge + y;
     chart.setOption({
-      tooltip: {trigger: 'axis', formatter: p => p[0].name + '<br/>家庭账户余额: ' + fmtWan(p[0].value)},
+      tooltip: {trigger: 'axis', formatter: function(p) {
+        const y = parseInt(p[0].name) - cy;
+        return p[0].name + ' 年<br/>家庭账户余额: ' + fmtWan(p[0].value) + '<br/>本人 ' + ageAt(s.currentAge, y) + ' 岁 · 配偶 ' + ageAt(s.spouse.currentAge, y) + ' 岁';
+      }},
       grid: {left: '3%', right: '4%', bottom: '3%', top: '10%', containLabel: true},
-      xAxis: {type: 'category', boundaryGap: false, data: ages, axisLabel: {interval: 4}},
+      xAxis: {type: 'category', boundaryGap: false, data: years, name: '年份', nameLocation: 'middle', nameGap: 28, axisLabel: {interval: 3}},
       yAxis: {type: 'value', name: '余额(万元·账面)', axisLabel: {formatter: v => fmtNum(v, 0)}},
       series: [{
         name: '家庭账户余额', type: 'line', smooth: true, symbol: 'none', data: balances,
         lineStyle: {color: '#e94560', width: 3}, itemStyle: {color: '#e94560'}, areaStyle: {color: 'rgba(233,69,96,0.15)'},
         markLine: {silent: true, symbol: 'none', data: [
-          {xAxis: (s.currentAge + j.R_first) + '岁', lineStyle: {color: '#60a5fa', type: 'dashed'}, label: {formatter: '首人退休', color: '#60a5fa'}},
-          {xAxis: (s.currentAge + j.R_last) + '岁', lineStyle: {color: '#fbbf24', type: 'dashed'}, label: {formatter: '两人均退休', color: '#fbbf24'}},
+          {xAxis: String(retireAYear), lineStyle: {color: '#60a5fa', type: 'dashed'}, label: {formatter: '本人退休 ' + s.targetAge + '岁', color: '#60a5fa'}},
+          {xAxis: String(retireBYear), lineStyle: {color: '#f472b6', type: 'dashed'}, label: {formatter: '配偶退休 ' + s.spouse.targetAge + '岁', color: '#f472b6'}},
           {yAxis: j.peakC, lineStyle: {color: '#34d399', type: 'dashed'}, label: {formatter: '所需储蓄 ' + fmtNum(j.peakC, 0) + '万', color: '#34d399'}}
         ]}
       }]
