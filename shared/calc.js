@@ -56,15 +56,11 @@ function retirementNetFlows(s) {
   for (let y = 0; s.targetAge + y < s.lifeExpectancy; y++) {
     const ph = phaseOfAge(s.targetAge + y);
     const base = lifestyleAnnual * phaseBaseMul(s, ph) * Math.pow(1 + infl, y);
-    const medicalNet = ph.medical * Math.pow(1 + medInfl, y) * (1 - insRate);
-    let extraMedical = 0;
-    if (medical.freq > 0 && y > 0 && y % medical.freq === 0) {
-      extraMedical = medical.base * Math.pow(1 + medInfl, y) * (1 - insRate);
-    }
+    const medicalNet = (ph.medical + medical) * Math.pow(1 + medInfl, y) * (1 - insRate);  // 常规 + 重大医疗(每人每年)
     const care = (ph.care && careMonthly) ? careMonthly * 12 * Math.pow(1 + medInfl, y) : 0;
     const income = pensionAnnual * Math.pow(1 + infl, y);
-    const expenses = base + medicalNet + extraMedical + care;
-    flows.push({y, age: s.targetAge + y, income, expenses, net: income - expenses, base, medical: medicalNet + extraMedical, care});
+    const expenses = base + medicalNet + care;
+    flows.push({y, age: s.targetAge + y, income, expenses, net: income - expenses, base, medical: medicalNet, care});
   }
   return flows;
 }
@@ -155,30 +151,30 @@ function coupleSolve(s) {
       let income = 0;
       if (aRet) income += (A.pension * 12 / 1e4) * Math.pow(1 + infl, y);
       if (bRet) income += (B.pension * 12 / 1e4) * Math.pow(1 + infl, y);
-      // 共同储蓄（直到较晚退休）
-      const deposit = y < R_last ? 12 * D * Math.pow(1 + infl, y) : 0;
-      // 家庭生活支出（进入退休期后；丧偶期按系数下调）
+      // 共同储蓄：两人都上班全额；首人退休后过渡期减半；两人均退休后停止
+      let deposit;
+      if (y < R_first) deposit = 12 * D * Math.pow(1 + infl, y);
+      else if (y < R_last) deposit = 6 * D * Math.pow(1 + infl, y);   // 过渡期（一人已退休）储蓄减半
+      else deposit = 0;
+      // 家庭生活支出：仅两人均退休后(R_last)才由池子承担；丧偶期按系数下调
       let living = 0;
-      if (y >= R_first && numAlive > 0) {
+      if (y >= R_last && numAlive > 0) {
         const survMul = numAlive === 2 ? 1 : surv;
         const older = Math.max(aAlive ? aAge : 0, bAlive ? bAge : 0);
         const phOlder = phaseOfAge(older);
         living = lifeH * survMul * phaseBaseMul(s, phOlder) * Math.pow(1 + infl, y);
       }
-      // 医疗/护理按在世者本人叠加
+      // 医疗(常规+重大)/护理：仅该人退休后才计入池子，按在世者本人叠加
       let med = 0, care = 0;
-      [[aAlive, aAge], [bAlive, bAge]].forEach(([al, ag]) => {
-        if (!al) return;
+      [[aRet, aAge], [bRet, bAge]].forEach(([ret, ag]) => {
+        if (!ret) return;
         const ph = phaseOfAge(ag);
-        med += ph.medical * Math.pow(1 + medInfl, y) * (1 - ins);
+        med += (ph.medical + medical) * Math.pow(1 + medInfl, y) * (1 - ins);  // 常规 + 重大医疗(每人每年)
         if (ph.care && careM) care += careM * 12 * Math.pow(1 + medInfl, y);
       });
-      // 大额医疗：每人计（事件年按在世人数叠加）
-      let extra = 0;
-      if (y >= R_first && medical.freq > 0 && y > 0 && y % medical.freq === 0) extra = numAlive * medical.base * Math.pow(1 + medInfl, y) * (1 - ins);
-      const outflow = living + med + care + extra;
+      const outflow = living + med + care;
       bal = bal * (1 + r) + deposit + income - outflow;
-      traj.push({y, aAge, bAge, aAlive, bAlive, numAlive, deposit, income, living, medical: med + extra, care, outflow, endBalance: bal});
+      traj.push({y, aAge, bAge, aAlive, bAlive, numAlive, deposit, income, living, medical: med, care, outflow, endBalance: bal});
     }
     return {traj, final: bal};
   }

@@ -7,7 +7,6 @@
   <!-- 第三方库 -->
   <script src='https://cdn.tailwindcss.com'></script>
   <script src='https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js'></script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'></script>
   <!-- KaTeX 数学公式渲染 -->
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css'>
   <script defer src='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js'></script>
@@ -30,7 +29,6 @@
       <div class='flex items-center gap-3 flex-wrap'>
         <span id='currentDate' class='text-sm text-gray-300 bg-black/20 px-3 py-1.5 rounded-lg'></span>
         <button id='refreshBtn' class='px-4 py-2 rounded-lg bg-[#16213e] hover:bg-[#1e2d4d] text-white text-sm transition border border-gray-600'>刷新</button>
-        <button id='exportBtn' class='px-4 py-2 rounded-lg bg-[#e94560] hover:bg-[#d13650] text-white text-sm transition font-medium shadow-lg shadow-[#e94560]/20'>导出 PNG</button>
       </div>
     </header>
 
@@ -42,8 +40,6 @@
       <div data-module='pyramid'></div>
       <div data-module='macro'></div>
     </div>
-
-    <div data-module='lifestyle'></div>
 
     <div class='grid grid-cols-1 lg:grid-cols-2 gap-6'>
       <div data-module='asset'></div>
@@ -76,27 +72,9 @@
       // header 交互
       document.getElementById('currentDate').textContent = new Date().toLocaleDateString('zh-CN', {year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'});
       document.getElementById('refreshBtn').addEventListener('click', () => Store.changed());
-      document.getElementById('exportBtn').addEventListener('click', exportPng);
 
       // 首次全量渲染
       Store.changed();
-    }
-
-    async function exportPng() {
-      const btn = document.getElementById('exportBtn');
-      const orig = btn.textContent;
-      btn.textContent = '生成中...';
-      btn.disabled = true;
-      try {
-        const canvas = await html2canvas(document.getElementById('dashboard'), {scale: 2, backgroundColor: '#0f1020', useCORS: true});
-        const link = document.createElement('a');
-        link.download = '养老看板_' + new Date().toISOString().slice(0, 10) + '.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      } finally {
-        btn.textContent = orig;
-        btn.disabled = false;
-      }
     }
 
     document.addEventListener('DOMContentLoaded', boot);

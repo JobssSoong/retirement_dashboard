@@ -130,9 +130,9 @@ const housePriceData = [
 
 const lifestyleOptions = {basic:6,normal:12,comfortable:20,premium:35,luxury:60};
 // 护理费（每人·月，当前购买力）。来源：民政部/市场调研区间（无全国官方中位数）
-const careOptions = {home:0.6,normal:0.8,mid:2.0,high:3.0};
-// 重疾单次治疗总费用（万元，当前购买力），医保报销后按有效自付率计入。来源：重疾行业读本
-const medicalOptions = {none:{freq:0,base:0},general:{freq:5,base:20},high:{freq:3,base:50},severe:{freq:2,base:80}};
+const careOptions = {self:0, homehelp:0.6, daycare:0.4, normal:0.8, mid:2.0, high:3.0};
+// 重大/长期医疗（每人·年，万元，当前购买力，按有效自付率计入）。来源：重疾行业读本
+const medicalOptions = {none:0, low:1, mid:3, high:5, severe:8};
 
 const assetParams = {
   '银行定存': {rate:0.015,vol:0,dd:0,liq:0,beh:0,color:'#95a5a6'},
@@ -147,9 +147,9 @@ const assetNames = Object.keys(assetParams);
 
 const defaultState = {
   mode: 'couple',              // 始终夫妻共同规划
-  startAge: 35,
+  startAge: 28,
   targetAge: 65,
-  currentAge: 35,
+  currentAge: 28,
   inflation: 0.025,
   returnRate: 0.03,
   currentSavings: 0,            // 已攒储蓄（万元）—— 唯一的"已有资产"输入
@@ -164,14 +164,14 @@ const defaultState = {
   pensionMonthly: 3000,        // 月养老金（元）
   insuranceRate: 0.6,          // 医保有效报销率（占总费用）
   medicalInflation: 0.03,      // 医疗通胀率
-  lifeExpectancy: 80,          // 预期寿命（岁）
+  lifeExpectancy: 85,          // 预期寿命（岁）
   // 三阶段支出系数（行为假设，可调）
   phaseMul: {active:1.2, decline:1.0, care:0.7},
   // 夫妻模式：配偶参数 + 丧偶期支出系数
   spouse: {
-    currentAge: 33,
+    currentAge: 37,
     targetAge: 60,              // 配偶退休年龄
-    lifeExpectancy: 82,         // 配偶预期寿命
+    lifeExpectancy: 88,         // 配偶预期寿命
     pensionType: 'employee',
     pensionMonthly: 2500
   },

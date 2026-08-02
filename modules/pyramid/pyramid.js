@@ -22,17 +22,22 @@ Dashboard.register('pyramid', (() => {
     const maleData = pop.male.map(v => -v);
     const femaleData = pop.female;
 
-    // 当前用户在所选年份的年龄，并在对应年龄段画标记线
+    // x 轴对称固定范围，使 0（中线）稳定居中，不随数据跳动
+    const maxVal = Math.max.apply(null, pop.male.concat(pop.female).map(Math.abs));
+    const bound = maxVal * 1.08;
+
+    // 本人 + 配偶 在所选年份的年龄，各画一条标记线
     const currentYear = new Date().getFullYear();
-    const userAge = Math.round(s.currentAge + (s.pyramidYear - currentYear));
-    let userMark = null;
-    if (userAge >= 0) {
-      const bandIdx = Math.max(0, Math.min(ageGroups.length - 1, Math.floor(userAge / 5)));
-      userMark = {
-        silent: true, symbol: 'none',
-        data: [{yAxis: ageGroups[bandIdx], lineStyle: {color: '#fbbf24', type: 'dashed', width: 2}, label: {formatter: '您 ' + userAge + ' 岁', color: '#fbbf24', position: 'insideStartTop'}}]
-      };
-    }
+    const offset = s.pyramidYear - currentYear;
+    const clamp = (a, b, x) => Math.max(a, Math.min(b, x));
+    const bandIdx = age => clamp(0, ageGroups.length - 1, Math.floor(age / 5));
+    const marks = [];
+    const addAgeMark = (age, label, color) => {
+      if (age >= 0 && age < 105) marks.push({yAxis: ageGroups[bandIdx(age)], lineStyle: {color, type: 'dashed', width: 2}, label: {formatter: label + ' ' + age + '岁', color, position: 'insideStartTop'}});
+    };
+    addAgeMark(Math.round(s.currentAge + offset), '本人', '#fbbf24');
+    addAgeMark(Math.round(s.spouse.currentAge + offset), '配偶', '#22d3ee');
+    const ageMark = marks.length ? {silent: true, symbol: 'none', data: marks} : undefined;
 
     chart.setOption({
       animation: false,
@@ -43,10 +48,10 @@ Dashboard.register('pyramid', (() => {
       }},
       legend: {data: ['男性', '女性'], top: 0, textStyle: {color: '#cbd5e1'}},
       grid: {left: '3%', right: '4%', bottom: '3%', top: '10%', containLabel: true},
-      xAxis: {type: 'value', axisLabel: {formatter: v => fmtNum(Math.abs(v), 0)}, splitLine: {lineStyle: {color: '#334155', type: 'dashed'}}},
+      xAxis: {type: 'value', name: '万人', min: -bound, max: bound, splitNumber: 5, axisLine: {onZero: true, lineStyle: {color: '#475569'}}, axisLabel: {formatter: v => fmtNum(Math.abs(v), 0)}, splitLine: {lineStyle: {color: '#334155', type: 'dashed'}}},
       yAxis: {type: 'category', data: pop.ageGroups, axisLabel: {color: '#94a3b8'}},
       series: [
-        {name: '男性', type: 'bar', stack: 'total', data: maleData, itemStyle: {color: '#60a5fa', borderRadius: [4, 0, 0, 4]}, markLine: userMark || undefined},
+        {name: '男性', type: 'bar', stack: 'total', data: maleData, itemStyle: {color: '#60a5fa', borderRadius: [4, 0, 0, 4]}, markLine: ageMark},
         {name: '女性', type: 'bar', stack: 'total', data: femaleData, itemStyle: {color: '#f472b6', borderRadius: [0, 4, 4, 0]}}
       ]
     }, true);

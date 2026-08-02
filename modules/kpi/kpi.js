@@ -19,10 +19,9 @@ Dashboard.register('kpi', {
     root.querySelector('#depositNominal').textContent = Math.round(dep.nominalFirst * 10000).toLocaleString('zh-CN') + ' 元/月起';
     root.querySelector('#depositNominalLast').textContent = Math.round(dep.nominalLast * 10000).toLocaleString('zh-CN') + ' 元/月';
 
-    // 倒计时
-    const diff = Math.max(0, s.targetAge - s.currentAge);
-    const years = Math.floor(diff);
-    const months = Math.round((diff - years) * 12);
-    root.querySelector('#countdownDisplay').textContent = years + ' 年 ' + months + ' 个月';
+    // 倒计时：本人 + 配偶
+    const cd = (retire, cur) => { const d = Math.max(0, retire - cur); const y = Math.floor(d), m = Math.round((d - y) * 12); return y + ' 年 ' + m + ' 月'; };
+    root.querySelector('#countdownA').textContent = cd(s.targetAge, s.currentAge);
+    root.querySelector('#countdownB').textContent = cd(s.spouse.targetAge, s.spouse.currentAge);
   }
 });
