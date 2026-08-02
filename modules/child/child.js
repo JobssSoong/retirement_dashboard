@@ -26,15 +26,14 @@ Dashboard.register('child', {
     [1, 2, 3].forEach((i, idx) => { root.querySelector('#childAge' + i).value = s.childAges[idx] != null ? s.childAges[idx] : ''; });
     root.querySelector('#childSupportSlider').value = s.childSupport;
     root.querySelector('#childSupportValue').textContent = fmtNum(s.childSupport, 1) + ' 万/年';
-    // 影响摘要：对比 启用/关闭 子女 的每月需存
+    // 影响摘要：拆解（养老 + 养孩 - 子女支持 = 总额）
     const n = s.childAges.length;
     const impact = root.querySelector('#childImpact');
     if (!n) { impact.innerHTML = '请填写至少一个孩子年龄。'; return; }
-    const on = coupleSolve(s).deposit.realMonthly;
-    const off = coupleSolve(Object.assign({}, s, {childEnabled: false, childSupport: 0})).deposit.realMonthly;
-    const delta = Math.round((on - off) * 10000);
-    const sign = delta >= 0 ? '+' : '';
-    impact.innerHTML = '养育 <b>' + n + '</b> 孩使家庭每月需存 <b style="color:#f59e0b">' + sign + delta.toLocaleString('zh-CN') + ' 元</b>'
-      + (delta < 0 ? '（子女支持假设已抵消养育成本）' : (s.childSupport > 0 ? '（含子女支持假设）' : '；如需计入子女支持，可上方调整。'));
+    const b = depositBreakdown(s);
+    const e = v => Math.round(v * 10000).toLocaleString('zh-CN');
+    impact.innerHTML = '每月需存拆解：<br>养老 <b>' + e(b.base) + '</b> + 养孩 <b style="color:#f59e0b">+' + e(b.childCost) + '</b>'
+      + ' − 子女支持 <b style="color:#34d399">' + e(b.childSupport) + '</b> = <b style="color:#fff">' + e(b.total) + ' 元/月</b>'
+      + (s.childSupport > 0 ? '<br>（子女支持为假设值，非预测）' : '<br>（子女支持默认0，可上方调整）');
   }
 });

@@ -216,6 +216,31 @@ function coupleSim(s) {
   return {detail: j.traj.filter(t => t.y >= j.R_first), full: j.traj, survives: last ? last.endBalance >= -1e-6 : true, finalBalance: last ? last.endBalance : 0, R_first: j.R_first, H: j.H};
 }
 
+// 乐观版：收益率 +1.5% 的对照场景
+const OPTIMISTIC_DELTA = 0.015;
+function optimisticSolve(s) {
+  s = s || state;
+  return coupleSolve(Object.assign({}, s, {returnRate: s.returnRate + OPTIMISTIC_DELTA}));
+}
+
+// 每月需存拆解（开了子女时）：自己养老 + 养孩子增加 - 子女支持抵消
+function depositBreakdown(s) {
+  s = s || state;
+  if (!s.childEnabled || !s.childAges || !s.childAges.length) {
+    return {total: requiredMonthlyDeposit(s, requiredRetirementCorpus(s).nominal).realMonthly, base: 0, childCost: 0, childSupport: 0, has: false};
+  }
+  const base = coupleSolve(Object.assign({}, s, {childEnabled: false, childSupport: 0})).deposit.realMonthly;
+  const costOnly = coupleSolve(Object.assign({}, s, {childSupport: 0})).deposit.realMonthly;
+  const full = coupleSolve(s).deposit.realMonthly;
+  return {total: full, base: base, childCost: costOnly - base, childSupport: costOnly - full, has: true};
+}
+// 格式化拆解文字（元）
+function breakdownText(b) {
+  if (!b.has) return '';
+  const e = v => Math.round(v * 10000).toLocaleString('zh-CN');
+  return '（养老 ' + e(b.base) + ' + 养孩 +' + e(b.childCost) + ' − 子女支持 ' + e(b.childSupport) + '）';
+}
+
 function getPopulation(year) {
   year = parseInt(year);
   const keys = Object.keys(populationByYear).map(Number).sort((a, b) => a - b);

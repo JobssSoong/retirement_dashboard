@@ -59,7 +59,7 @@ Dashboard.register('growth', (() => {
         p.forEach(x => { if (x.value != null) html += '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + x.color + ';margin-right:5px;"></span>' + x.seriesName + ': ' + fmtWan(x.value) + '<br/>'; });
         return html;
       }},
-      legend: {data: ['账户余额', '每年应存', '生活支出', '医疗支出', '护理支出'], top: 0, textStyle: {color: '#cbd5e1', fontSize: 10}},
+      legend: {data: ['账户余额', '余额(乐观)', '每年应存', '生活支出', '医疗支出', '护理支出'], top: 0, textStyle: {color: '#cbd5e1', fontSize: 10}},
       grid: {left: '3%', right: '4%', bottom: '3%', top: '12%', containLabel: true},
       xAxis: {type: 'category', boundaryGap: true, data: years, name: '年份', nameLocation: 'middle', nameGap: 28, axisLabel: {interval: 4}},
       yAxis: [
@@ -78,7 +78,10 @@ Dashboard.register('growth', (() => {
             {xAxis: lastYear, lineStyle: {color: '#94a3b8', type: 'dotted'}, label: {formatter: '较晚去世 ' + lastLife + '岁', color: '#94a3b8'}},
             {yAxis: j.peakC, lineStyle: {color: '#34d399', type: 'dashed'}, label: {formatter: '所需储蓄 ' + fmtNum(j.peakC, 0) + '万', color: '#34d399'}}
           ]},
-          markArea: {silent: true, label: {color: '#a78bfa', fontSize: 10, formatter: '丧偶期'}, data: survAreas}}
+          markArea: {silent: true, label: {color: '#a78bfa', fontSize: 10, formatter: '丧偶期'}, data: survAreas}},
+        {name: '余额(乐观)', type: 'line', yAxisIndex: 0, smooth: true, symbol: 'none',
+          data: optimisticSolve(s).traj.map(t => +t.endBalance.toFixed(2)),
+          lineStyle: {color: '#34d399', width: 2, type: 'dashed', opacity: 0.5}, itemStyle: {color: '#34d399'}, z: 1}
       ]
     }, true);
   }
@@ -227,10 +230,19 @@ Dashboard.register('growth', (() => {
       root.querySelector('#returnRateHint').textContent = '当前 ' + (rr < 0.03 ? '偏保守(类定存/国债)' : rr < 0.05 ? '稳健(固收+)' : rr < 0.08 ? '较积极(含权益)' : '激进(高权益)');
 
       const j = coupleSolve(s);
-      root.querySelector('#growthDepositReadout').textContent = Math.round(j.deposit.realMonthly * 10000).toLocaleString('zh-CN') + ' 元/月（购买力恒定）';
+      const b = depositBreakdown(s);
+      const e = v => Math.round(v * 10000).toLocaleString('zh-CN');
+      root.querySelector('#growthDepositReadout').innerHTML = e(b.total) + ' 元/月' + (b.has
+        ? '<br><span style="font-size:11px;color:#a1a1aa">养老 ' + e(b.base) + ' + 养孩 <span style="color:#f59e0b">+' + e(b.childCost) + '</span> − 子女支持 <span style="color:#34d399">' + e(b.childSupport) + '</span></span>'
+        : '（购买力恒定）');
       renderChart(s, j);
       renderBreakdown(s, j);
       renderNominals(s);
+
+    // 乐观版读数
+    const jo = optimisticSolve(s);
+    const oRate = ((s.returnRate + 0.015) * 100).toFixed(1);
+    root.querySelector('#growthDepositReadout').innerHTML += '<br><span style="font-size:11px;color:#34d399">乐观(~' + oRate + '%): ' + Math.round(jo.deposit.realMonthly * 10000).toLocaleString('zh-CN') + ' 元/月</span>';
     },
 
     resize() { chart && chart.resize(); breakdown && breakdown.resize(); }

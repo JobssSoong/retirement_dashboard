@@ -29,6 +29,7 @@
       <div class='flex items-center gap-3 flex-wrap'>
         <span id='currentDate' class='text-sm text-gray-300 bg-black/20 px-3 py-1.5 rounded-lg'></span>
         <button id='refreshBtn' class='px-4 py-2 rounded-lg bg-[#2a2a2e] hover:bg-[#3f3f46] text-white text-sm transition border border-gray-600'>刷新</button>
+        <button id='exportParamsBtn' class='px-4 py-2 rounded-lg bg-[#2a2a2e] hover:bg-[#3f3f46] text-white text-sm transition border border-gray-600'>导出参数</button>
       </div>
     </header>
 
@@ -73,6 +74,16 @@
       // header 交互
       document.getElementById('currentDate').textContent = new Date().toLocaleDateString('zh-CN', {year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'});
       document.getElementById('refreshBtn').addEventListener('click', () => Store.changed());
+      document.getElementById('exportParamsBtn').addEventListener('click', () => {
+        const json = JSON.stringify(state, null, 2);
+        const blob = new Blob([json], {type: 'application/json'});
+        const link = document.createElement('a');
+        link.download = 'retirement_params.json';
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        // 同时复制到剪贴板，方便直接粘贴
+        navigator.clipboard.writeText(json).then(() => alert('参数已导出为 JSON 文件下载，并复制到剪贴板。\n你可以直接粘贴给我，我来分析。'));
+      });
 
       // 首次全量渲染
       Store.changed();
